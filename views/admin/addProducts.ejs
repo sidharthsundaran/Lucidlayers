@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Add Products</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <link href="assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <style>.error-message {
+        color: red;
+        font-size: 14px; /* Adjust size as needed */
+        margin-top: 5px; /* Space above the error message */
+    }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin/dashboard" class="brand-wrap">
+                <img src="assets/imgs/theme/Logo2.png" class="logo" alt="LucidLayers">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">users</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/Categories"> <i
+                            class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i
+                                class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                    </div>
+                    <div class="messages">
+                        <% if (messages.error && messages.error.length> 0) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error.join('<br>') %>
+                            </div>
+                            <% } %>
+
+                                <% if (messages.success && messages.success.length> 0) { %>
+                                    <div class="alert alert-success" >
+                                        <%= messages.success.join('<br>') %>
+                                    </div>
+                                    <% } %>
+                    </div>
+
+                    <form action="/admin/newproducts" method="post" enctype="multipart/form-data"  onsubmit="return formvalidation(event)" id='productForm'>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="product_title" class="form-label">Product Title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="title"
+                                        id="product_title">
+                                        <span class="error-message" id="titleError"></span>
+
+                                </div>
+                                <div class="row gx-3">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="product_material" class="form-label">Material</label>
+                                        <input type="text" placeholder="Type here" name="material" class="form-control"
+                                            id="product_material" >
+                                            <div class="error-message" id="MaterialError"></div>
+
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="product_color" class="form-label">Color</label>
+                                        <input type="text" placeholder="Type here" class="form-control" name="color"
+                                            id="product_color" >
+                                            <div class="error-message" id="colorError"></div>
+
+                                    </div>
+                                    <div class="card mb-4" id="sizeVariationsSection">
+                                        <div class="card-body">
+                                            <h5>Size Variations</h5>
+                                            <div id="sizeVariationsContainer">
+                                                <div class="size-variation">
+                                                    <div class="row gx-3 mb-3">
+                                                        <div class="col-md-4">
+                                                            <label for="size" class="form-label">Size</label>
+                                                            <input type="text" placeholder="Size" class="form-control" name="sizes[]" required>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="price" class="form-label">Price</label>
+                                                            <input type="number" placeholder="Price" class="form-control" name="prices[]" required>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="stock" class="form-label">Stock</label>
+                                                            <input type="number" placeholder="Stock" class="form-control" name="stocks[]" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary" onclick="addSizeVariation()">Add Another Size Variation</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="product_sleeve" class="form-label">Sleeve Length</label>
+                                    <!-- <input type="text" placeholder="Type here" class="form-control" name="sleeve" id="product_sleeve"> -->
+                                    <select class="form-select" name="sleeve" id="product_sleeve" >
+                                        <option value="" selected>Choose sleeveLength</option>
+                                        <option value="Half">Half</option>
+                                        <option value="Full">Full</option>
+                                         </select>
+                                         <div class="error-message" id="sleeveError"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="card-body"> 
+                                        <label for="gender" class="form-label">gender</label>
+                                        <!-- <input type="text" placeholder="Type here" class="form-control" name="sleeve" id="product_sleeve"> -->
+                                        <select class="form-select" name="gender" id="gender" >
+                                            <option value="" selected>Choose gender</option>
+                                            <option value="male">male</option>
+                                            <option value="female">female</option>
+                                            <option value="unisex">Unisex</option>
+                                            </select>
+                                            <div class="error-message" id="genderError"></div>
+                                    </div>
+                                </div>
+                            </div> <!-- Card: Basic Info End -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="description"
+                                        rows="4" ></textarea>
+                                </div>
+                                <div class="error-message" id="descriptionError"></div>
+                            </div>
+                        </div> <!-- Card: Description End -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="product_category" class="form-label">Category</label>
+                                    <select class="form-select" name="category" id="product_category" >
+                                        <option value="<%= data.category %>" selected>
+                                            <%= data.category %>
+                                        </option>
+                                        <% if (data.length> 0) { %>
+                                            <% data.forEach(function(category) { %>
+                                                <option value="<%= category.name %>">
+                                                    <%= category.name %>
+                                                </option>
+                                                <% }); %>
+                                                    <% } %>
+                                    </select>
+                                    <div class="error-message" id="categoryError"></div>
+                                </div>
+                            </div>
+                        </div> <!-- Card: Category End -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <label class="form-label">Images</label>
+                                    <!-- Allow adding images one by one or multiple -->
+                                    <input class="form-control" type="file" name="images" id="images" onchange="addFiles(event)"  multiple>                                    <div id="imagePreview" class="mt-3"></div>
+                                </div>
+                                <div id="cropModal" style="display: none">
+                                    <img id="croppingImage" style="max-width: 100%" />
+                                    <button type="button" id="cropButton" onclick="cropImage()">Crop Image</button>
+                                </div>
+                            </div>
+                            <div class="error-message" id="imageError"></div>
+                        </div>
+                         <!-- Card: Images End -->
+                        <div class="mb-4 text-center">
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                        </div>
+                        <div class="mb-4 text-center">
+                            <div id="message"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/js/vendors/select2.min.js"></script>
+    <script src="/admin/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin/assets/js/main.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script>
+
+function addSizeVariation() {
+    const container = document.getElementById('sizeVariationsContainer');
+    const newVariation = document.createElement('div');
+    newVariation.classList.add('size-variation');
+    newVariation.innerHTML = `
+        <div class="row gx-3 mb-3">
+            <div class="col-md-4">
+                <label for="size" class="form-label">Size</label>
+                <input type="text" placeholder="Size" class="form-control" name="sizes[]" required>
+            </div>
+            <div class="col-md-4">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" placeholder="Price" class="form-control" name="prices[]" required>
+            </div>
+            <div class="col-md-4">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" placeholder="Stock" class="form-control" name="stocks[]" required>
+            </div>
+        </div>
+    `;
+    container.appendChild(newVariation);
+}
+
+
+
+
+
+
+
+        document.getElementById('productForm').onsubmit = function(event) {
+    event.preventDefault();
+    if (validateForm()) {
+        this.submit();
+    }
+};
+
+function validateForm() {
+    console.log("hello")
+    document.querySelectorAll('.error-message').forEach(el => el.innerHTML = '');
+    
+    const title = document.getElementById('product_title').value.trim();
+    const material = document.getElementById('product_material').value.trim();
+    const color = document.getElementById('product_color').value.trim();
+
+    const sleeve = document.getElementById('product_sleeve').value;
+    const gender = document.getElementById('gender').value;
+    const description = document.querySelector('textarea[name="description"]').value.trim();
+    const category = document.getElementById('product_category').value;
+    const images = document.getElementById('images').files;
+    const sizes = document.getElementsByName('sizes[]');
+    const prices = document.getElementsByName('prices[]');
+    const stocks = document.getElementsByName('stocks[]');
+
+    let isValid = true;
+    if (!title) {
+        document.getElementById('titleError').innerHTML = 'Please enter the product title.';
+        isValid = false;
+    }
+    if (!material) {
+        document.getElementById('MaterialError').innerHTML = 'Please enter the material.';
+        isValid = false;
+    }
+    if (!color) {
+        document.getElementById('colorError').innerHTML = 'Please enter the color.';
+        isValid = false;
+    }
+    if (!sleeve) {
+        document.getElementById('sleeveError').innerHTML = 'Please select a sleeve length.';
+        isValid = false;
+    }
+    if (!gender) {
+        document.getElementById('genderError').innerHTML = 'Please select a gender.';
+        isValid = false;
+    }
+    if (!description) {
+        document.getElementById('descriptionError').innerHTML = 'Please enter a description.';
+        isValid = false;
+    }
+
+    if (!category) {
+        document.getElementById('categoryError').innerHTML = 'Please select a category.';
+        isValid = false;
+    }
+
+    if (images.length === 0) {
+        document.getElementById('imageError').innerHTML = 'Please upload at least one image.';
+        isValid = false;
+    }
+    for (let i = 0; i < sizes.length; i++) {
+        if (!sizes[i].value) {
+            sizes[i].parentElement.nextElementSibling.innerHTML = 'Please enter a size.';
+            isValid = false;
+        }
+        if (!prices[i].value || isNaN(prices[i].value) || parseFloat(prices[i].value) <= 0) {
+            prices[i].parentElement.nextElementSibling.innerHTML = 'Please enter a valid price.';
+            isValid = false;
+        }
+        if (!stocks[i].value || isNaN(stocks[i].value) || parseInt(stocks[i].value) < 0) {
+            stocks[i].parentElement.nextElementSibling.innerHTML = 'Please enter a valid stock quantity.';
+            isValid = false;
+        }
+    }
+
+    return isValid;
+}
+
+    </script>
+        
+    <script>
+ let cropper;
+let currentFile;
+let currentImgElement;
+let currentFileIndex;
+let filesArray = []; 
+
+function addFiles(event) {
+    const fileInput = document.getElementById('images');
+    const imagePreviewContainer = document.getElementById("imagePreview");
+    const files = event.target.files;
+    Array.from(files).forEach((file) => {
+        filesArray.push(file); 
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imgContainer = document.createElement("div");
+            imgContainer.style.display = "inline-block";
+            imgContainer.style.position = "relative";
+            imgContainer.style.marginRight = "10px";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.width = "100px";
+            img.style.cursor = "pointer";
+            img.onclick = () => openCropper(e.target.result, img, filesArray.length - 1);
+
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.style.position = "absolute";
+            removeButton.style.top = "0";
+            removeButton.style.right = "0";
+            removeButton.style.backgroundColor = "red";
+            removeButton.style.color = "white";
+            removeButton.style.border = "none";
+            removeButton.style.cursor = "pointer";
+            removeButton.onclick = () => removeImage(filesArray.length - 1); 
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(removeButton);
+            imagePreviewContainer.appendChild(imgContainer);
+        };
+
+        reader.readAsDataURL(file);
+    });
+    updateFileInput();
+}
+
+function removeImage(index) {
+    filesArray.splice(index, 1); 
+    updateFileInput();
+    refreshImagePreview();
+}
+
+
+function updateFileInput() {
+    const fileInput = document.getElementById('images');
+    const dataTransfer = new DataTransfer(); 
+
+    filesArray.forEach(file => {
+        dataTransfer.items.add(file); 
+    });
+
+    fileInput.files = dataTransfer.files; 
+}
+
+function refreshImagePreview() {
+    const imagePreviewContainer = document.getElementById("imagePreview");
+    imagePreviewContainer.innerHTML = ""; // Clear the existing previews
+
+    filesArray.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imgContainer = document.createElement("div");
+            imgContainer.style.display = "inline-block";
+            imgContainer.style.position = "relative";
+            imgContainer.style.marginRight = "10px";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.width = "100px";
+            img.style.cursor = "pointer";
+            img.onclick = () => openCropper(e.target.result, img, index); 
+
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "X";
+            removeButton.style.position = "absolute";
+            removeButton.style.top = "0";
+            removeButton.style.right = "0";
+            removeButton.style.backgroundColor = "red";
+            removeButton.style.color = "white";
+            removeButton.style.border = "none";
+            removeButton.style.cursor = "pointer";
+            removeButton.onclick = () => removeImage(index); 
+
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(removeButton);
+            imagePreviewContainer.appendChild(imgContainer);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+e
+function openCropper(imageSrc, imgElement, index) {
+    const cropModal = document.getElementById("cropModal");
+    const croppingImage = document.getElementById("croppingImage");
+
+    currentFileIndex = index;
+    currentImgElement = imgElement; 
+    croppingImage.src = imageSrc; 
+
+    cropModal.style.display = "block"; 
+    if (cropper) cropper.destroy(); 
+
+    cropper = new Cropper(croppingImage, {
+        aspectRatio: 1,
+        viewMode: 2,
+    });
+}
+
+
+function cropImage() {
+    const canvas = cropper.getCroppedCanvas();
+
+    canvas.toBlob((blob) => {
+        const croppedFile = new File([blob], filesArray[currentFileIndex].name, { type: 'image/png' });
+
+        
+        filesArray[currentFileIndex] = croppedFile;
+
+        
+        currentImgElement.src = URL.createObjectURL(croppedFile);
+
+        document.getElementById("cropModal").style.display = "none";
+        cropper.destroy();
+        cropper = null;
+    }, 'image/png');
+}
+
+
+    </script>
+
+
+<script>
+
+function formvalidation() {
+    console.log("hello")
+    let isValid = true
+   const title = document.getElementById("producttitle").value.trim()
+    if(!title && title.length>3){
+        document.getElementById("errortitle").innerText ="plz enter a valid input"
+        isValid =false
+
+    }else{
+        document.getElementById("errortitle").innerText =""
+    }
+
+        return isValid; 
+    }
+    $(document).ready(function() {
+        $('form').on('submit', function(e) {
+            e.preventDefault(); 
+
+            var formData = $(this).serialize(); 
+
+            $.ajax({
+                type: 'POST',
+                url: '/admin/newporoducts',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/admin/newproducts'; 
+                            }
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    // If there was an error, show SweetAlert error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: xhr.responseJSON.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    });
+
+
+</script>
+    
+    
+    
+
+</body>
+
+</html>

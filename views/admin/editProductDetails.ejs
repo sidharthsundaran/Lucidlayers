@@ -1,0 +1,412 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Update Products</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/imgs/theme/favicon.svg">
+    <link href="/admin/assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin/dashboard" class="brand-wrap">
+                <img src="/admin/assets/imgs/theme/Logo2.png" class="logo" alt="LucidLayers">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">users</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/Categories"> <i
+                            class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i
+                                class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/admin/assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Update Product</h2>
+                    </div>
+                    <div class="messages">
+                        <% if (messages.error && messages.error.length > 0) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error.join('<br>') %>
+                            </div>
+                        <% } %>
+                    
+                        <% if (messages.success && messages.success.length > 0) { %>
+                            <div class="alert alert-success">
+                                <%= messages.success.join('<br>') %>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="product_title" class="form-label">Product Title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" value="<%= data.name %>" name="title" id="product_title">
+                                </div>
+                                <div class="row gx-3">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="product_material" class="form-label">Material</label>
+                                        <input type="text" placeholder="Type here" name="material" value="<%= data.material  %>" class="form-control" id="product_material">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="product_color" class="form-label">Color</label>
+                                        <input type="text" placeholder="Type here" class="form-control" value="<%= data.color %>" name="color" id="product_color">
+                                    </div>
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="mb-4">
+                                                <label for="product_size_variations" class="form-label">Size Variations</label>
+                                                <div id="size-variations-container">
+                                                    <% data.sizeVariations.forEach((variation, index) => { %>
+                                                        <div class="size-variation">
+                                                            <select class="form-select" name="sizes[]" required>
+                                                                <option value="<%= variation.size %>" selected><%= variation.size %></option>
+                                                                <option value="S">S</option>
+                                                                <option value="M">M</option>
+                                                                <option value="L">L</option>
+                                                                <option value="XL">XL</option>
+                                                            </select>
+                                                            <input type="number" name="prices[]" value="<%= variation.price %>" placeholder="Price" required>
+                                                            <input type="number" name="stocks[]" value="<%= variation.stock %>" placeholder="Stock" required>
+                                                            <button type="button" class="btn btn-danger" onclick="removeSizeVariation(this)">Remove</button>
+                                                        </div>
+                                                    <% }); %>
+                                                </div>
+                                                <button type="button" class="btn btn-primary" onclick="addSizeVariation()">Add Size Variation</button>
+                                            </div>
+                                        </div>
+                                    </div>                                
+                                </div>
+                                <div class="mb-4">
+                                    <label for="product_sleeve" class="form-label">Sleeve Length</label>
+                                    <select class="form-select" name="sleeve" id="product_sleeve">
+                                        <option value="" selected><%= data.sleeveLength %></option>
+                                        <option value="Half">Half</option>
+                                        <option value="sleeveless">sleeveless</option>
+                                        <option value="Full">Full</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div> <!-- Card: Basic Info End -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control"  name="description" rows="4"><%= data.description %></textarea>
+                                </div>
+                            </div>
+                        </div> <!-- Card: Description End -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label for="product_category" class="form-label">Category</label>
+                                    <select class="form-select" name="category" id="product_category">
+                                        <option value="<%= data.category %>" selected><%= data.category %></option>
+                                        <% if (categoryData.length > 0) { %>
+                                            <% categoryData.forEach(function(category) { %>
+                                                <option value="<%= category.name %>"><%= category.name %></option>
+                                                <% }); %>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> <!-- Card: Category End -->
+                                <div class="card mb-4">
+                                    <!-- Image Input and Preview Section -->
+                               <!-- Image Input and Preview Section -->
+                               <div class="card-body">
+                                <label class="form-label">Images</label>
+                                <input class="form-control" type="file" name="newImages" id="newImages" onchange="previewNewImages(event)" multiple>
+                                <div id="imagePreview" class="mt-3">
+                                    <!-- Existing Images -->
+                                    <% data.images.forEach((image) => { %>
+                                        <div class="image-container existing-image" data-image="<%= image %>">
+                                            <img src="/uploads/<%= image %>" class="img-thumbnail" style="width:100px; cursor:pointer;"
+                                                 onclick="openCropper('/uploads/<%= image %>', 'existing', '<%= image %>')">
+                                            <button type="button" class="btn btn-danger" onclick="removeImage('<%= image %>', 'existing')">x</button>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                                <!-- Cropping Modal -->
+                                <div id="cropModal" style="display:none;">
+                                    <img id="croppingImage" src="" alt="Image to crop">
+                                    <button onclick="cropImage()">Crop</button>
+                                </div>
+                            </div>
+                            
+                            </div>
+                            </div>
+                                </div>
+                                <div class="mb-4 text-center">
+                                    <button type="submit" class="btn btn-primary">Update Product</button>
+                                </div>
+                                <div class="mb-4 text-center">
+                                    <div id="message"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <script src="assets/js/vendor.js"></script>
+            <script src="assets/js/main.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+            <script>
+                   let cropper;
+    let currentImage = null;
+    let imageArray = []; // Stores new images
+    let existingImages = <%- JSON.stringify(data.images) %>; // Existing images loaded from server
+    let removedImages = []; // Tracks existing images that are removed
+
+    // Preview and add new images
+    function previewNewImages(event) {
+        const files = event.target.files;
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgContainer = createImageContainer(e.target.result, 'new', file);
+                imageArray.push(file); // Store the file for upload
+                document.getElementById("imagePreview").appendChild(imgContainer);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Create image container for both new and existing images
+    function createImageContainer(src, type, imageFileOrName) {
+        const container = document.createElement("div");
+        container.classList.add("image-container");
+        
+        const img = document.createElement("img");
+        img.src = src;
+        img.classList.add("img-thumbnail");
+        img.style = "width:100px; cursor:pointer;";
+        img.onclick = () => openCropper(src, type, imageFileOrName);
+
+        container.appendChild(img);
+
+        // Crop button
+        const cropBtn = document.createElement("button");
+        cropBtn.innerText = "Crop";
+        cropBtn.classList.add("btn", "btn-primary");
+        cropBtn.onclick = () => openCropper(src, type, imageFileOrName);
+        container.appendChild(cropBtn);
+
+        // Remove button
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Remove";
+        removeBtn.classList.add("btn", "btn-danger");
+        removeBtn.onclick = () => removeImage(imageFileOrName, type);
+
+        container.appendChild(removeBtn);
+        return container;
+    }
+
+    // Open cropping modal
+    function openCropper(imageSrc, type, imageFileOrName) {
+        document.getElementById("cropModal").style.display = "block";
+        document.getElementById("croppingImage").src = imageSrc;
+        if (cropper) cropper.destroy();
+
+        cropper = new Cropper(document.getElementById("croppingImage"), { aspectRatio: 1 });
+        currentImage = { type, imageFileOrName };
+    }
+
+    // Crop and replace the image
+    function cropImage() {
+        cropper.getCroppedCanvas().toBlob((blob) => {
+            const croppedFile = new File([blob], `${Date.now()}.png`, { type: 'image/png' });
+            
+            if (currentImage.type === 'new') {
+                const index = imageArray.indexOf(currentImage.imageFileOrName);
+                if (index >= 0) imageArray[index] = croppedFile;
+            } else if (currentImage.type === 'existing') {
+                removeImage(currentImage.imageFileOrName, 'existing', true); // Remove existing image and replace it
+                imageArray.push(croppedFile);
+            }
+
+            document.getElementById("cropModal").style.display = "none";
+            cropper.destroy();
+        });
+    }
+
+    // Remove selected image
+    function removeImage(imageFileOrName, type, isCropped = false) {
+        if (type === 'existing') {
+            removedImages.push(imageFileOrName); // Track removed image from existing
+            const imgContainer = document.querySelector(`[data-image="${imageFileOrName}"]`);
+            if (imgContainer) imgContainer.remove(); // Remove preview
+            // Send an AJAX request to remove the image from the database
+            sendRemoveImageRequest(imageFileOrName);
+        } else if (type === 'new') {
+            const index = imageArray.indexOf(imageFileOrName);
+            if (index >= 0) imageArray.splice(index, 1);
+        }
+    }
+
+    // Function to send AJAX request to remove image from the database
+    function sendRemoveImageRequest(imageFileName) {
+        fetch(`/admin/products/remove-image`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imageFileName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Image removed successfully:', data);
+        })
+        .catch((error) => {
+            console.error('Error removing image:', error);
+        });
+    }
+            
+                function addSizeVariation() {
+                    const container = document.getElementById('size-variations-container');
+                    const newVariation = document.createElement('div');
+                    newVariation.classList.add('size-variation');
+                    newVariation.innerHTML = `
+                        <select class="form-select" name="sizes[]" required>
+                            <option value="" selected>Select Size</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                        <input type="number" name="prices[]" placeholder="Price" required>
+                        <input type="number" name="stocks[]" placeholder="Stock" required>
+                        <button type="button" class="btn btn-danger" onclick="removeSizeVariation(this)">Remove</button>
+                    `;
+                    container.appendChild(newVariation);
+                }
+                
+                function removeSizeVariation(button) {
+                    button.parentElement.remove();
+                }
+            </script>
+        </body>
+        
+        </html>

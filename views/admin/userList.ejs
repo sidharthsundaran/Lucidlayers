@@ -1,0 +1,305 @@
+    <!DOCTYPE HTML>
+    <html lang="en">
+
+
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-sellers-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:23 GMT -->
+    <head>
+        <meta charset="utf-8">
+        <title>Evara Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/imgs/theme/favicon.svg">
+        <!-- Template CSS -->
+        <link href="/admin/assets/css/main.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <img src="/admin/assets/imgs/theme/Logo2.png" class="logo" alt="Evara Dashboard">
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-person"></i>
+                            <span class="text">users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Add product</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/Categories"> <i
+                                class="icon material-icons md-monetization_on"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                            <span class="text">Account</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                            <span class="text">Reviews</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                            <span class="text">Brands</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                            <span class="text">Statistics</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <br>
+                <br>
+            </nav>
+        </aside>
+        
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                            <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                        </div>
+                        <datalist id="search_terms">
+                            <option value="Products">
+                            <option value="New orders">
+                            <option value="Apple iphone">
+                            <option value="Ahmed Hassan">
+                        </datalist>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon" href="#">
+                                <i class="material-icons md-notifications animation-shake"></i>
+                                <span class="badge rounded-pill">3</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin/assets/imgs/people/avatar2.jpg" alt="User"></a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                                <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Users list</h2>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <div class="col-lg-4 col-md-6 me-auto">
+                                <input type="text" placeholder="Search..." class="form-control">
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Status</option>
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Show 20</option>
+                                    <option>Show 30</option>
+                                    <option>Show 40</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header> <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>user</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Registered</th>
+                                        <th>Number</th>
+                                        <th class="text-end"> Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(user.length > 0) { %>
+                                        <% for( let i=0;i<user.length;i++){ %>
+                                            <tr>
+                                                <td width="40%">
+                                                    <a href="#" class="itemside">
+                                                        <div class="left">
+                                                            <img src="/admin/assets/imgs/people/avatar5.jpg" class="img-sm img-avatar" alt="Userpic">
+                                                        </div>
+                                                        <div class="info pl-3">
+                                                            <h6 class="mb-0 title"><%= user[i].name %> </h6>
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                                <td><%= user[i].email %></td>
+                                                <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                                <td><%= user[i].dateJoined %></td>
+                                                <td><%= user[i].phone %></td>
+                                                <td class="text-end">
+                                                    <% if( user[i].blocked ==false){ %>
+                                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#blockModal" data-userId="<%= user[i]._id %>">Block</button>
+                                                        <% } if(user[i].blocked==true) { %>
+                                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#unblockModal" data-userId="<%= user[i]._id %>">Unblock</button>
+                                                            <% } %>
+                                                </td>
+                                            </tr>
+                                    <% } %>
+                                    <% } %>
+                                
+                                </tbody>
+                            </table> <!-- table-responsive.// -->
+                        </div>
+                    </div> <!-- card-body end// -->
+                </div> <!-- card end// -->
+                <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </section> <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                        document.write(new Date().getFullYear())
+                        </script> ©, Evara - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">
+                            All rights reserved
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+            <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="blockModalLabel">Confirm Blocking</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to block this user?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a id="confirmblock" href="#" class="btn btn-danger">block</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="unblockModal" tabindex="-1" aria-labelledby="unblockModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="unblockModalLabel">Confirm Unblocking</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to unblock this user?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a id="confirmunblock" href="#" class="btn btn-primary">unblock</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="/admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/admin/assets/js/vendors/select2.min.js"></script>
+        <script src="/admin/assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/admin/assets/js/main.js" type="text/javascript"></script>
+        <script>
+            // Pass the user ID to the modal's confirm button
+            var blockModal = document.getElementById('blockModal');
+            blockModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var userId = button.getAttribute('data-userId');
+                var confirmblock = blockModal.querySelector('#confirmblock');
+                confirmblock.href = '/admin/users/blockuser/' + userId;
+            });
+
+            var unblockModal = document.getElementById('unblockModal');
+            unblockModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var userId = button.getAttribute('data-userId');
+                var confirmunblock = unblockModal.querySelector('#confirmunblock');
+                confirmunblock.href = '/admin/users/unblockuser/' + userId;
+            });
+        </script>
+    </body>
+
+
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-sellers-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:23 GMT -->
+    </html>
