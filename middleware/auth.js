@@ -91,7 +91,7 @@ const isLogin = async (req, res, next) => {
 //     next()
 // }
 // }
-
+console.log('hello')
 // const adminPreventLogin = async (req, res, next) => {
 //     const token = req.cookies.adminAccessToken
 //     if (token) {
