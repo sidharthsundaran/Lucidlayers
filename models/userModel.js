@@ -31,7 +31,11 @@ const userSchema = new mongoose.Schema({
     },
     googleId:{
         type:String
-    }
+    },
+    coupons:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'DiscountCodes'
+    }]
 
 },{timestamps:true})
 

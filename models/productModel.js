@@ -55,21 +55,16 @@ const mongoose = require('mongoose');
         status: {
             type: Boolean,
             default: false
-        }
+        },
+        offers: [{ 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Offers'
+        }],
+        
     });
 
-// productSchema.virtual('formattedCreatedAt').get(function() {
-//     const date = this.createdAt;
-//     const day = date.getDate().toString().padStart(2, '0');
-//     const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
-//     const year = date.getFullYear();
-//     return `${day}/${month}/${year}`;
-// });
-// productSchema.set('toJSON', { virtuals: true });
-// productSchema.set('toObject', { virtuals: true });
+
 
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;
 
-// const sizeVariationschema = mongoose.model('sizeVariationSchema', sizeVariationSchema);
-// module.exports = sizeVariationschema;

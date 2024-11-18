@@ -16,7 +16,9 @@ const {renderHome,logout,renderShop,renderProductDetails,renderUserDetails,
 
     cancelOrderitem,renderCancelConfirm,cancelOrder,updateCartQuantity,proceedtoCheckout,
 
-    removeFromWishlist,addtoWishlist,renderWishlist}=require('../controllers/userControllers')
+    removeFromWishlist,addtoWishlist,renderWishlist,verifyPaymentAndCreateOrder,showCoupons,applyCoupon,
+    
+    removeCoupon}=require('../controllers/userControllers')
 
 
 
@@ -54,9 +56,13 @@ router.route("/wishlist").get(renderWishlist)
 router.route('/checkout-order').get(rendercheckOut)
 router.route('/checkout-order/add-address').post(newAddress)
 router.route('/place-order').post(createOrder)
+router.route('/verify-payment').post(verifyPaymentAndCreateOrder)
 router.route('/order/confirmation/:id').get(renderOrderSuccess)
 router.route('/account/view-order').get(renderOrderdetails)
 router.route('/account/orders/confirm-cancel-item').get(rendercancelitem).post(cancelOrderitem)
 router.route('/account/cancel-order').get(renderCancelConfirm).post(cancelOrder)
+router.route('/coupons').get(showCoupons)
+router.route('/checkout-order/apply-coupon').post(applyCoupon)
+router.route('/checkout-order/remove-coupon').post(removeCoupon)
 
 module.exports=router

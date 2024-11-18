@@ -489,16 +489,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="cart-shiping-update-wrapper">
-                                        <div class="discount-code">
-                                            <input type="text"  name="name" placeholder="Coupon code">
-                                            <button class="coupon-btn" type="submit">Apply coupon</button>
-                                        </div>
-                                        <div class="cart-clear">
-                                            <a href="#">Clear Cart</a>
-                                            <a href="#">Update cart</a>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="grand-total-wrap">
@@ -509,9 +500,11 @@
                                                 <li>Total <span id="cartTotal">₹<%= cart.totalPrice.toFixed(2) %></span></li>
                                             </ul>
                                         </div>
+                                        <% if(cart.cartItems.length > 0){ %>
                                         <div class="grand-btn">
                                             <button type="submit">Proceed to checkout</button>
                                         </div>
+                                        <% } %>
                                         <div id="toast" class="toast" style="display: none;">
                                             <span id="toastMessage"></span>
                                         </div>

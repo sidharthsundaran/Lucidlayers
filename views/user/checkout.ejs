@@ -34,6 +34,162 @@
     <link rel="stylesheet" href="/user/assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <style>
+        #toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+.cart-shipping-update-wrapper {
+    display: flex;
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center; /* Center items vertically */
+    padding: 10px; /* Add some padding */
+    background-color: #f9f9f9; /* Light background color */
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.discount-code {
+    display: flex; /* Use flexbox to align items in a row */
+    align-items: center; /* Center items vertically */
+}
+
+.coupon-input {
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px; /* Padding inside the input */
+    margin-right: 5px; /* Space between input and remove button */
+    width: 150px; /* Fixed width for input */
+    font-size: 14px; /* Font size */
+}
+
+.remove-coupon {
+    background: none; /* No background */
+    border: none; /* No border */
+    color: #ff0000; /* Red color for the remove button */
+    font-size: 20px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    margin-right: 10px; /* Space between remove button and view coupon button */
+}
+
+.remove-coupon:hover {
+    color: #cc0000; /* Darker red on hover */
+}
+
+.coupon-btn {
+    background-color: #007bff; /* Primary button color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px 12px; /* Padding */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.coupon-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+.toast {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    opacity: 0.9;
+    transition: opacity 0.5s ease;
+}
+   /* Modal Background */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 9999; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    overflow: auto; 
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffffff;
+    margin: 10% auto; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%; 
+    max-width: 500px; 
+    position: relative;
+}
+
+/* Close Button */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+/* Heading Style */
+h2 {
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Coupon List */
+#couponList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* List Item Style */
+#couponList li {
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+}
+
+/* Radio Button Style */
+input[type="radio"] {
+    margin-right: 10px;
+    width: 15px; /* Smaller radio button */
+    height: 15px; /* Smaller radio button */
+    cursor: pointer;
+}
+
+/* Apply Button Style */
+.apply-button {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.apply-button:hover {
+    background-color: #218838; /* Darker green */
+}
+    </style>
 </head>
 
 <body>
@@ -380,10 +536,10 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="index.html">Home 01 </a>
+                            <a href="/user/home">Home </a>
                         </li>
                         <li><span> &gt; </span></li>
-                        <li class="active">Checkout </li>
+                        <li class="/user/checkout-order">Checkout </li>
                     </ul>
                 </div>
             </div>
@@ -391,7 +547,7 @@
         <!-- checkout start -->
         <div class="checkout-main-area pt-100 pb-100">
             <div class="container">
-                <div class="customer-zone mb-30">
+                <!-- <div class="customer-zone mb-30">
                     <p class="cart-page-title">Have a coupon? <a class="checkout-click" href="#">Click here to enter your code</a></p>
                     <div class="checkout-login-info">
                         <p>If you have a coupon code, please apply it below.</p>
@@ -400,7 +556,7 @@
                             <input type="submit" value="Apply Coupon">
                         </form>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <% if(address.length > 0) { %>
                         <% for(let i = 0; i < address.length; i++) { %>
@@ -517,9 +673,8 @@
                                             <ul>
                                                 <% if (cart && cart.cartItems.length > 0) { %>
                                                     <% cart.cartItems.forEach(item => { %>
-                                                <li ><%= item.product.name %> X <%= item.quantity %> <span><%= item.price %> </span></li>
-                                                
-                                                <% })} %>
+                                                        <li><%= item.product.name %> X <%= item.quantity %> <span>₹<%= item.price %> </span></li>
+                                                    <% })} %>
                                             </ul>
                                         </div>
                                         <div class="your-order-info order-subtotal">
@@ -527,17 +682,41 @@
                                                 <li>Subtotal <span><%= cart.totalQuantity %> </span></li>
                                             </ul>
                                         </div>
+                                        <div class="your-order-info order-subtotal">
+                                            <ul>
+                                                <li>Discount <span>₹<%= cart.discount %> </span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="your-order-info order-subtotal">
+                                            <ul>
+                                                <li>Delivery Charge <span>₹0</span></li>
+                                            </ul>
+                                        </div>
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span><%= cart.totalPrice %> </span></li>
+                                                <li>Total <span>₹<%= cart.totalPrice %> </span></li>
                                             </ul>
+                                        </div>
+                                        <div class="cart-shipping-update-wrapper">
+                                            <div class="discount-code">
+                                                <% if (cart.appliedCoupon) { %> 
+                                                    <input type="text" name="name" placeholder="<%= cart.appliedCoupon %>" disabled>
+                                                    <button class="remove-coupon" type="button" id="removeCouponBtn">✖</button>
+                                                <% } %>
+                                                <button class="coupon-btn" type="button">View Coupon</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="payment-method">
-                                        
-                                        <div><input type="radio" name="paymentMethod" value="Pay On Delivery" style="height: 15px;width: 15px;" checked><h5>cash on delivery</h5></div>
-                                        <!-- <h5>Direct Bank Transfer</h5> -->
-                                        <!-- <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p> -->
+                                        <h4>Select Payment Method:</h4>
+                                        <div>
+                                            <input type="radio" name="paymentMethod" value="Pay On Delivery" style="height: 15px;width: 15px;" checked>
+                                            <label for="cod"><h5>Cash on Delivery</h5></label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="paymentMethod" value="Razorpay" style="height: 15px;width: 15px;">
+                                            <label for="razorpay"><h5>Online Payment (Razorpay)</h5></label>
+                                        </div>
                                     </div>
                                     <div class="condition-wrap">
                                         <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a></p>
@@ -548,16 +727,25 @@
                                     </div>
                                 </div>
                                 <div class="Place-order mt-30">
-                                
-                                        <button type="button" onclick="placeOrder()" style="background-color: black; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;">
-                                            Place Order
-                                        </button>                                
+                                    <button type="button" onclick="placeOrder()" style="background-color: black; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;">
+                                        Place Order
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Modal Structure -->
+<div id="couponModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Available Coupons</h2>
+        <ul id="couponList"></ul>
+        <button id="applyCouponBtn" class="apply-button">Apply Coupon</button>
+    </div>
+</div>
         <!-- checkout end -->
         <footer class="footer-area section-padding-1 border-top-3">
             <div class="container-fluid">
@@ -927,7 +1115,7 @@
             </div>
         </div>
     </div>
-
+    <div id="toast-container"></div>
     <!-- All JS is here
 ============================================ -->
 
@@ -964,8 +1152,85 @@
     <!-- Main JS -->
     <script src="/user/assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+
+    document.getElementById('toast-container').appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.remove();
+        }, 500);
+    }, 3000);
+}
+
+document.querySelector('.coupon-btn').addEventListener('click', openModal);
+
+async function openModal() {
+    const response = await fetch('/user/coupons'); // Adjust the path as needed
+    const coupons = await response.json();
+
+    const couponList = document.getElementById('couponList');
+    couponList.innerHTML = ''; // Clear previous coupons
+
+    coupons.forEach(coupon => {
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="radio" name="coupon" value="${coupon.code}"> ${coupon.code} - ${coupon.description}`;
+        couponList.appendChild(li);
+    });
+
+    document.getElementById('couponModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('couponModal').style.display = 'none';
+}
+
+document.getElementById('applyCouponBtn').addEventListener('click', async function() {
+    const selectedCoupon = document.querySelector('input[name="coupon"]:checked');
+    if (!selectedCoupon) {
+        showToast('Please select a coupon to apply.');
+        return;
+    }
+
+    const couponCode = selectedCoupon.value;
+
+    try {
+        const response = await fetch('/user/checkout-order/apply-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode })
+        });
+
+        const result = await response.json();
+        console.log(result);
+        if (!result) {
+        Swal.fire({
+            icon: 'warning',
+            title: "sasadasd",
+            toast: true,
+            position: 'top',
+            timer: 3000,
+            showConfirmButton: false,
+        });
+        return;
+    }
+        closeModal()
+        location.reload()
+    } catch (error) {
+        console.error('Error applying coupon:', error);
+        alert('An error occurred while applying the coupon.');
+    }
+});
+
        function validateForm(e) {
         const phone = document.getElementById('phone').value;
         const zip = document.getElementById('zip').value;
@@ -1077,15 +1342,91 @@
     })
     .then(response => response.json())
     .then(data => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Order placed successfully!',
-            toast: true,
-            position: 'top',
-            timer: 3000,
-            showConfirmButton: false,
-        });
-            window.location.href = `/user/order/confirmation/${data.orderId}`;
+        console.log(data);
+        
+        if (data.success) {
+            // Check if Razorpay order ID is present
+            if (data.razorpayOrderId) {
+                const options = {
+                    key: data.key, // Your Razorpay key
+                    amount: data.amount, // Amount in paise
+                    currency: data.currency,
+                    name: "LucidLayers",
+                    description: "Order Description",
+                    order_id: data.razorpayOrderId, // Razorpay order ID
+                    handler: function (response) {
+                        // Ensure the signature is available in the response
+                        console.log("Payment Response:", response);
+                        if (response.razorpay_signature) {
+                            // Proceed with verification
+                            fetch('/user/verify-payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    addressId: orderData.addressId,
+                                    order_id: data.razorpayOrderId,
+                                    payment_id: response.razorpay_payment_id,
+                                    signature: response.razorpay_signature // This should be present
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(result => {
+                                if (result.success) {
+                                    // Redirect to confirmation page
+                                    window.location.href = `/user/order/confirmation/${result.orderId}`; 
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Payment verification failed.',
+                                        text: result.message || 'Please try again.',
+                                        toast: true,
+                                        position: 'top',
+                                        timer: 3000,
+                                        showConfirmButton: false,
+                                    });
+                                }
+                            });
+                        } else {
+                            console.error("Signature is undefined.");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Payment verification failed.',
+                                text: 'Signature is missing.',
+                                toast: true,
+                                position: 'top',
+                                timer: 3000,
+                                showConfirmButton: false,
+                            });
+                        }
+                    },
+                    prefill: {
+                        name: "Customer Name",
+                        email: "customer@example.com",
+                        contact: "7012872516"
+                    },
+                    theme: {
+                        color: "black"
+                    }
+                };
+
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+            } else {
+                // If not Razorpay, redirect to confirmation page directly
+                window.location.href = `/user/order/confirmation/${data.orderId}`; // Ensure orderId is returned for Pay on Delivery
+            }
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error creating order. Please try again.',
+                toast: true,
+                position: 'top',
+                timer: 3000,
+                showConfirmButton: false,
+            });
+        }
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
@@ -1094,12 +1435,60 @@
             title: 'Error placing order. Please try again.',
             toast: true,
             position: 'top',
-            timer: 3000,
+            timer:  3000,
             showConfirmButton: false,
         });
     });
 }
+document.getElementById('removeCouponBtn').addEventListener('click', async function() {
+    try {
+        const response = await fetch('/user/checkout-order/remove-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+        const result = await response.json();
+
+        if (response.ok) {
+            // Show success toast
+            location.reload();
+            Swal.fire({
+                toast: true,
+                icon: 'success',
+                title: result.message,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            // Update the UI with the new total
+            updateOrderTotal(result.newTotal);
+        } else {
+            // Show error toast
+            Swal.fire({
+                toast: true,
+                icon: 'error',
+                title: result.message,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            location.reload();
+        }
+    } catch (error) {
+        console.error('Error removing coupon:', error);
+        Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: 'An error occurred while removing the coupon.',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        location.reload();
+    }
+});
     </script>
 
 </body>

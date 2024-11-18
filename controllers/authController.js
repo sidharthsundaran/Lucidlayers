@@ -9,6 +9,8 @@ const {generateotp,sendOtpMail,sendOtpMail2} =require('../utility/otputility')
 const {generateaccessToken,generateRefreshToken,generateAdminaccessToken,generateAdminRefreshToken}=require('../middleware/accessToken')
 const getFormattedDate=require('../utility/dateFormat')
 const otpModel = require('../models/otpmodel')
+const wallet= require('../models/walletModel') 
+const Wallet = require('../models/walletModel')
 require('dotenv').config()
 const securePassword = async(password)=>{
     try{
@@ -18,6 +20,7 @@ const securePassword = async(password)=>{
         console.log(error.message)
     }
 }
+
 
 const googleAuth =async (req, res) => {
     
@@ -80,7 +83,6 @@ async(req, res) => {
         })
          await user.save()
         //  console.log(user);
-         
          const {otp, otpExpiresAt } = generateotp()
          console.log(otp);
          
@@ -129,6 +131,10 @@ const verifyOtp = async(req, res)=>{
             })
 
             await user.save()
+            const wallet= new Wallet({
+                user:user._id
+            })
+            await wallet.save()
             return res.redirect('/auth/login')
         }
         else{

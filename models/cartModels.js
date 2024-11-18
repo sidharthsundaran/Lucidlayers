@@ -27,6 +27,13 @@ const cartSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    appliedCoupon:{
+        type:String,
+    },
+    discount:{
+        type:Number,
+        default:0
     }
 });
 

@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Add Offer</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/imgs/theme/favicon.svg">
+    <link href="/admin/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .form-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        body.dark .form-section {
+            background-color: #2c2c2c;
+        }
+        body.dark .form-section h3 {
+            color: #fff;
+        }
+        .checkbox-group {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .checkbox-item {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .preview-section {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .preview-item {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 2px 8px;
+            margin: 2px;
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+        body.dark .preview-section {
+            background-color: #343a40;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin/dashboard" class="brand-wrap">
+                <img src="/admin/assets//imgs/theme/Logo2.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">users</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/offers"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Offers</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/Categories"> <i
+                            class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/create-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#" id="darkmode-toggle"> 
+                            <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/admin//admin/assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/admin//admin/assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/admin//admin/assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/admin//admin/assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin//admin/assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-12">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Offer</h2>
+                    </div>
+                    
+                    <form action="/admin/create-coupon" method="post" onsubmit="return validateForm()" id='couponForm'>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="form-section">
+                                    <h3>Basic Information</h3>
+                                    <div class="two-column">
+                                        <div class="mb-4">
+                                            <label for="coupon_code" class="form-label">Coupon Code</label>
+                                            <input type="text" placeholder="Enter coupon code" class="form-control" name="code" id="coupon_code" required>
+                                            <span class="error-message" id="codeError"></span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="coupon_name" class="form-label">Coupon Name</label>
+                                            <input type="text" placeholder="Enter coupon name" class="form-control" name="name" id="coupon_name">
+                                            <span class="error-message" id="nameError"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="coupon_description" class="form-label">Description</label>
+                                        <textarea placeholder="Enter coupon description" class="form-control" name="description" id="coupon_description" rows="4" required></textarea>
+                                        <span class="error-message" id="descriptionError"></span>
+                                    </div>
+                                </div>
+                                <div class="form-section">
+                                    <h3>Discount Details</h3>
+                                    <div class="two-column">
+                                        <div class="mb-4">
+                                            <label for="discount_type" class="form-label">Discount Type</label>
+                                            <select class="form-select" name="isPercent" id="discount_type" required>
+                                                <option value="true">Percentage</option>
+                                                <option value="false">Fixed Amount</option>
+                                            </select>
+                                            <span class="error-message" id="discountTypeError"></span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="discount_amount" class="form-label">Discount Amount</label>
+                                            <input type="number" placeholder="Enter discount amount" class="form-control" name="amount" id="discount_amount" required>
+                                            <span class="error-message" id="amountError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3>Validity and Usage</h3>
+                                    <div class="two-column">
+                                        <div class="mb-4">
+                                            <label for="expire_date" class="form-label">Expiration Date</label>
+                                            <input type="date" class="form-control" name="expireDate" id="expire_date" required>
+                                            <span class="error-message" id="expireDateError"></span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="min_purchase" class="form-label">Minimum Purchase Amount</label>
+                                            <input type="number" placeholder="Enter minimum purchase amount" class="form-control" name="minPurchase" id="min_purchase" required>
+                                            <span class="error-message" id="minPurchaseError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3>Status</h3>
+                                    <div class="mb-4">
+                                        <label for="is_active" class="form-label">Active Status</label>
+                                        <select class="form-select" name="isActive" id="is_active">
+                                            <option value="true">Active</option>
+                                            <option value="false">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4 text-center">
+                            <button type="submit" class="btn btn-primary">Add Coupon</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/admin//admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin//admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin//admin/assets/js/main.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    
+    function validateForm() {
+    let isValid = true;
+    document.querySelectorAll('.error-message').forEach(el => el.innerHTML = '');
+
+    const code = document.getElementById('coupon_code').value.trim();
+    const description = document.getElementById('coupon_description').value.trim();
+    const amount = document.getElementById('discount_amount').value;
+    const expireDate = new Date(document.getElementById('expire_date').value);
+    const minPurchase = document.getElementById('min_purchase').value;
+
+    if (!code) {
+        document.getElementById('codeError').innerHTML = 'Please enter a coupon code.';
+        isValid = false;
+    }
+
+    if (!description) {
+        document.getElementById('descriptionError').innerHTML = 'Please enter a coupon description.';
+        isValid = false;
+    }
+
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+        document.getElementById('amountError').innerHTML = 'Please enter a valid discount amount.';
+        isValid = false;
+    }
+
+    if (isNaN(expireDate.getTime())) {
+        document.getElementById('expireDateError').innerHTML = 'Please enter a valid expiration date.';
+        isValid = false;
+    }
+
+    if (!minPurchase || isNaN(minPurchase) || Number(minPurchase) < 0) {
+        document.getElementById('minPurchaseError').innerHTML = 'Please enter a valid minimum purchase amount.';
+        isValid = false;
+    }
+
+    return isValid;
+}
+document.getElementById('couponForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    
+    if (!validateForm()) {
+        return;
+    }
+    
+    const formData = new FormData(this);
+    const formObj = {};
+    formData.forEach((value, key) => {
+        formObj[key] = value;
+    });
+
+    try {
+        const response = await fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formObj)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            Swal.fire({
+                toast: true,
+                icon: 'success',
+                title: result.message,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            }).then(() => {
+                window.location.reload(); 
+            });
+        } else {
+            Swal.fire({
+                toast: true,
+                icon: 'error',
+                title: result.message || 'An error occurred',
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: 'An unexpected error occurred. Please try again later.',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+});
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const darkmodeToggle = document.getElementById('darkmode-toggle');
+                const body = document.body;
+    
+                if (localStorage.getItem('darkmode') === 'enabled') {
+                    body.classList.add('dark');
+                }
+    
+                darkmodeToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    body.classList.toggle('dark');
+    
+                    if (body.classList.contains('dark')) {
+                        localStorage.setItem('darkmode', 'enabled');
+                    } else {
+                        localStorage.setItem('darkmode', 'disabled');
+                    }
+                });
+            });
+    </script>
+    
+</body>
+</html>

@@ -3,12 +3,11 @@ const Products=require('../models/productModel')
 const Categories = require("../models/categoryModel")
 const Order = require('../models/orderModels')
 const orderItem = require('../models/orderItemModel')
-const {imageFilter,upload} = require('../utility/upload')
+const Offers= require('../models/offerModel')
+const Coupons = require('../models/discountModel')
 const fs = require('fs');
 const path = require('path');
-const sizeVariationschema =require('../models/productModel')
 const { log } = require('console');
-const { renderOrderdetails } = require('./userControllers')
 
 
 
@@ -147,7 +146,6 @@ const renderEditProduct = async (req, res) => {
 const addCategory = async (req, res) => {
   try {
       const { name, description } = req.body;
-      console.log(name);
       
       const cat= await Categories.findOne({name: { $regex: `^${name}$`, $options: 'i' } })
       if(cat){
@@ -205,7 +203,6 @@ const editCategory = async (req, res) => {
             return res.redirect('/admin/products');
         }
 
-        // Handle removed images
         let updatedImages = productData.images || [];
         if (removedImages && Array.isArray(removedImages)) {
             removedImages.forEach((img) => {
@@ -215,19 +212,16 @@ const editCategory = async (req, res) => {
             updatedImages = updatedImages.filter(img => !removedImages.includes(img));
         }
 
-        // Handle new images
         const newImagePaths = req.files ? req.files.map(file => file.filename) : [];
         updatedImages.push(...newImagePaths);
 
 
-        // Create size variations array
         const sizeVariations = sizes.map((size, index) => ({
             size,
             price: parseFloat(prices[index]),
             stock: parseInt(stocks[index], 10)
         }));
 
-        // Update the product
         await Products.findByIdAndUpdate(id, {
             $set: {
                 name:title,
@@ -236,7 +230,7 @@ const editCategory = async (req, res) => {
                 sleeveLength:sleeve,
                 material,
                 color,
-                sizeVariations, // Update size variations
+                sizeVariations, 
                 images: updatedImages,
             },
         });
@@ -500,6 +494,155 @@ const changeOrderStatus= async(req,res)=>{
   }
 }
 
+const renderaddOffer = async (req, res) => {
+  try {
+      const product = await Products.find()
+      const categories = await Categories.find()
+      res.render('addOffer', { product, categories })
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching products and categories' });
+  }
+}
+
+const newOffer = async (req, res) => {
+  try {
+      const { 
+          title, 
+          description, 
+          discountType, 
+          discountValue, 
+          startDate, 
+          endDate, 
+          active,
+          applicableTo,
+          productId,
+          categoryId,
+          maxUsage
+      } = req.body;
+    
+      const newOffer = new Offers({
+          title,
+          description,
+          discountType,
+          discountValue: Number(discountValue),
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          active: active === 'true',
+          applicableTo,
+          productId: applicableTo === 'product' || applicableTo === 'both' ? productId : [],
+          categoryId: applicableTo === 'category' || applicableTo === 'both' ? categoryId : [],
+          maxUsage: Number(maxUsage),
+          usedCount: 0
+      })
+      await newOffer.save();
+      res.status(200).json({ message: 'Offer created successfully' })
+  } catch (error) {
+      res.status(400).json({ message:'something went wrong! Try again.'});
+  }
+}
+
+
+
+const renderOffersList = async(req,res)=>{
+  try {
+    const offers = await Offers.find();
+    res.render('offersList', { offers });
+  } catch (error) {
+    res.status(500).send('Error fetching offers');
+  }
+
+}
+
+const unlistOffers = async(req,res)=>{
+  const id = req.params.id
+  try{
+    const offer = await Offers.findByIdAndUpdate({_id:id},{$set:{active:false}})
+    if(!offer){
+      res.status(400).json({ message:'offer not found! Try again.'});
+    }
+    return res.redirect('/admin/offers')
+
+  }catch(error){
+    console.log(error)
+    res.status(400).json({ message:'something went wrong! Try again.'});
+
+  }
+}
+
+const listOffers = async(req,res)=>{
+  const id = req.params.id
+  try{
+    const offer = await Offers.findByIdAndUpdate({_id:id},{$set:{active:true}})
+    if(!offer){
+      res.status(400).json({ message:'offer not found! Try again.'});
+    }
+    return res.redirect('/admin/offers')
+
+  }catch(error){
+    console.log(error)
+    res.status(400).json({ message:'something went wrong! Try again.'});
+
+  }
+}
+
+const deleteOffers = async(req,res)=>{
+  const id = req.params.id
+  try{
+    const offer = await Offers.findByIdAndDelete({_id:id})
+    if(!offer){
+     return res.status(400).json({ message:'offer not found! Try again.'});
+    }
+    res.status(200).json({ message: 'Offer deleted successfully' })
+  }catch(error){
+    console.log(error)
+    return res.status(400).json({ message:'something went wrong! Try again.'});
+
+  }
+}
+
+const renderAddCoupon = async (req,res)=>{
+  try {
+    res.render('addCoupon') 
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+const createCoupon = async (req, res) => {
+  console.log(req.body);
+  const { code, name, description, isPercent, amount, expireDate, minPurchase, isActive } = req.body;
+  try {
+    if (!code || !name || !amount || !expireDate || minPurchase == null) {
+      return res.status(400).json({ message: 'All required fields must be provided.' })
+    }
+    const exist = await Coupons.findOne({$or: [{ code: code }, { name: name }]})
+    if (exist) {
+      return res.status(400).json({success:false, message: 'Coupon with the same code or name already exists! Try another one.' })
+    }
+
+    const coupon = await Coupons.create({
+      code,
+      name,
+      description,
+      isPercent,
+      amount,
+      expireDate,
+      minPurchase,
+      isActive
+    })
+    if(coupon){
+    return res.status(200).json({success:true, message: 'Coupon created successfully!'})
+    }
+  } catch (error) {
+    console.error('Error creating coupon:', error)
+    return res.status(500).json({
+      success:false,
+      message: 'Failed to create coupon. Please try again later.',
+      error: error.message
+    })
+  }
+}
+
 module.exports={
     renderDashboard,
     renderUsers,
@@ -521,5 +664,15 @@ module.exports={
     unarchiveProduct,
     renderAdminOrders,
     renderadminOrderdetails,
-    changeOrderStatus
+    changeOrderStatus,
+    renderaddOffer,
+    renderOffersList,
+    newOffer,
+    listOffers,
+    unlistOffers,
+    deleteOffers,
+    renderAddCoupon,
+    createCoupon
+
+    
 }

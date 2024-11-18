@@ -35,29 +35,110 @@
     <style>
       .toast {
     position: fixed;
-    bottom: 15px;
-    right: 15px;
+    bottom: 20px;
+    right: 20px;
     background-color: #333;
     color: white;
     padding: 10px 20px;
     border-radius: 2px;
     opacity: 0.9;
     transition: opacity 0.5s ease;
-    z-index: 1000; /* Ensure it appears above other content */
+    z-index: 1000; 
 }
 
 .toast.fade-out {
     opacity: 0;
 }
 .thumbnail {
-    width: 100px; /* Set the width of the thumbnail */
+    width: 75px; /* Set the width of the thumbnail */
     height: auto; /* Maintain aspect ratio */
-    border-radius: 5px; /* Optional: add rounded corners */
+    border-radius: 3px; /* Optional: add rounded corners */
     transition: transform 0.2s; /* Optional: add a hover effect */
 }
 
 .thumbnail:hover {
     transform: scale(1.1); /* Optional: scale up on hover */
+}
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; /* Ensure it's above other content */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background */
+    padding-top: 60px; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px; /* Narrower width */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between buttons */
+    margin-bottom: 20px;
+}
+
+.size-button {
+    display: inline-block;
+    width: 40px; /* Set width for square buttons */
+    height: 40px; /* Set height for square buttons */
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px; /* Center text vertically */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.size-button.selected {
+    background-color: #007bff; /* Highlight color when selected */
+    color: white;
+}
+
+.add-to-cart-btn {
+    background-color: black; /* Black background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    width: auto; /* Adjust width automatically */
+}
+
+.add-to-cart-btn:hover {
+    background-color: #333; /* Darker shade on hover */
+}
+
+.error-message {
+    color: red; /* Red color for error messages */
+    margin-bottom: 10px; /* Space below error message */
+    font-weight: bold; /* Bold text */
 }
         </style>
 </head>
@@ -192,7 +273,7 @@
                         <h4>Subtotal: <span>$170.00</span></h4>
                     </div>
                     <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="cart.html">view cart</a>
+                        <a class="btn-hover cart-btn-style" href="/user/cart">view cart</a>
                         <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
                     </div>
                 </div>
@@ -333,7 +414,7 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="index.html">Home 01 </a>
+                            <a href="/user/home">Home </a>
                         </li>
                         <li><span> &gt; </span></li>
                         <li class="active"> Wishlist </li>
@@ -393,7 +474,7 @@
                                                             </td>
                                                             <% if (inStock) { %>
                                                                 <td class="wishlist-cart">
-                                                                    <a href="#">Add to cart</a>
+                                                                    <a href="#" onclick="showSizeSelection('<%= product._id %>', <%= JSON.stringify(product.sizeVariations) %>)">Add to cart</a>
                                                                 </td>
                                                             <% } else { %>
                                                                 <td class="wishlist-cart">
@@ -417,6 +498,18 @@
                 </div>
             </div>
         </div>
+        <div id="toast" class="toast" style="display:none;"></div>
+
+        <!-- Size Selection Modal -->
+<div id="sizeSelectionModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Select Size</h2>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        <div id="sizeOptions" class="size-options"></div>
+        <button id="confirmAddToCart" class="add-to-cart-btn" onclick="confirmAddToCart()">Add to Cart</button>
+    </div>
+</div>
         <footer class="footer-area section-padding-1 border-top-3">
             <div class="container-fluid">
                 <div class="footer-top pt-100 pb-60">
@@ -789,7 +882,83 @@
     <!-- All JS is here
 ============================================ -->
 <script>
-   async function removeFromWishlist(productId) {
+    let currentProductId;
+let currentSizeVariations;
+
+function showSizeSelection(productId, sizeVariations) {
+    currentProductId = productId;
+    currentSizeVariations = sizeVariations;
+
+    const sizeOptionsDiv = document.getElementById('sizeOptions');
+    sizeOptionsDiv.innerHTML = ''; // Clear previous options
+
+    sizeVariations.forEach(variation => {
+        if (variation.stock > 0) {
+            const sizeButton = document.createElement('div');
+            sizeButton.className = 'size-button';
+            sizeButton.innerText = variation.size;
+            sizeButton.onclick = () => selectSize(sizeButton, variation.size);
+            sizeOptionsDiv.appendChild(sizeButton);
+        }
+    });
+
+    document.getElementById('sizeSelectionModal').style.display = 'block';
+}
+
+function selectSize(button, size) {
+    const buttons = document.querySelectorAll('.size-button');
+    buttons.forEach(btn => btn.classList.remove('selected')); // Remove selection from all buttons
+    button.classList.add('selected'); // Add selection to the clicked button
+}
+
+async function confirmAddToCart() {
+    const selectedButton = document.querySelector('.size-button.selected');
+    const errorMessageDiv = document.getElementById('errorMessage');
+    errorMessageDiv.style.display = 'none'; // Hide error message initially
+
+    if (!selectedButton) {
+        errorMessageDiv.innerText = 'Please select a size.';
+        errorMessageDiv.style.display = 'block'; // Show error message
+        return;
+    }
+
+    const selectedSize = selectedButton.innerText; 
+    const quantity = 1; 
+    try {
+        const response = await fetch(`/user/add-to-cart/${currentProductId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                selectedSize: selectedSize,
+                quantity: quantity,
+            }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            showToast(result.message); // Show toast message for successful addition
+            closeModal();
+            setTimeout(() => {
+                location.reload(); // Refresh the page after a successful addition
+            }, 3000); // Wait for the toast to be displayed before refreshing
+        } else {
+            errorMessageDiv.innerText = result.message; // Show error message in modal
+            errorMessageDiv.style.display = 'block'; // Show error message
+        }
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+        errorMessageDiv.innerText = 'There was an error adding the item to the cart.'; // Show error in modal
+        errorMessageDiv.style.display = 'block'; // Show error message
+    }
+}
+
+function closeModal() {
+    document.getElementById('sizeSelectionModal').style.display = 'none';
+}
+
+async function removeFromWishlist(productId) {
     try {
         const response = await fetch('/user/remove-from-wishlist', {
             method: 'POST',
@@ -798,14 +967,14 @@
             },
             body: JSON.stringify({ productId })
         });
-        console.log("request sent")
+        console.log("request sent");
         const data = await response.json();
 
         if (response.ok) {
-            showToast(data.message);
-            location.reload()
+            showToast(data.message); // Show toast message for successful removal
+            location.reload(); // Refresh the page after successful removal
         } else {
-            showToast(data.message);
+            showToast(data.message); // Show toast message for error
         }
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -814,21 +983,18 @@
 }
 
 function showToast(message) {
-    // Create a toast element
-    const toast = document.createElement('div');
-    toast.className = 'toast';
+    const toast = document.getElementById('toast');
     toast.innerText = message;
+    toast.style.display = 'block'; // Show the toast
+    toast.style.opacity = 1; // Reset opacity
 
-    // Append to body
-    document.body.appendChild(toast);
-
+    // Automatically hide the toast after 3 seconds
     setTimeout(() => {
-        toast.classList.add('fade-out');
-    }, 2500); // Start fading out after 2.5 seconds
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
+        toast.style.opacity = 0; // Fade out
+        setTimeout(() => {
+            toast.style.display = 'none'; // Hide the toast completely
+        }, 500); // Wait for fade out to complete
+    }, 3000); // Show for 3 seconds
 }
 </script>
 

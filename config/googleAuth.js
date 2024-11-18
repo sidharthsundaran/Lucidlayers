@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User=require('../models/userModel')
 const jwt = require('jsonwebtoken');
+const Wallet= require('../models/walletModel')
 require('dotenv').config()
 
 
@@ -23,6 +24,10 @@ async (accessToken, refreshToken, profile, done) => {
                 name: profile.displayName
             });
             await user.save();
+            let wallet= new Wallet({
+                user:user._id
+            })
+            await wallet.save()
             return done(null, user);
         }
 
