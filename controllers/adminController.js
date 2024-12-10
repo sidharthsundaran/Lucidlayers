@@ -8,13 +8,130 @@ const Coupons = require('../models/discountModel')
 const fs = require('fs');
 const path = require('path');
 const { log } = require('console');
+const Wallet = require('../models/walletModel')
+const Transactions =require('../models/transactions')
+const PDFDocument = require('pdfkit');
+const ExcelJS = require('exceljs');
 
 
 
 
-const renderDashboard = async(req,res)=>{
-    res.render('Dashboard')
-}
+
+const renderDashboard = async (req, res) => {
+    try {
+        const totalRevenue = await Order.aggregate([
+            { $group: { _id: null, total: { $sum: "$totalPrice" } } }
+        ]);
+
+        const totalOrders = await Order.countDocuments();
+        const totalProducts = await Products.countDocuments();
+        
+        const totalCategories= await Categories.countDocuments()
+        const monthlyEarnings = await Order.aggregate([
+          {
+              $match: {
+                  createdAt: {
+                      $gte: new Date(new Date().setDate(1)), // Start of the month
+                      $lt: new Date(new Date().setMonth(new Date().getMonth() + 1)) // Start of next month
+                  }
+              }
+          },
+          {
+              $group: {
+                  _id: null,
+                  total: { $sum: "$totalPrice" }
+              }
+          }
+      ]);
+      const topProducts = await Order.aggregate([
+        {
+            $lookup: {
+                from: 'orderitems', // Match the correct collection name for OrderItem
+                localField: 'items', // Reference in Order
+                foreignField: '_id', // Field in OrderItem
+                as: 'orderItems',
+            },
+        },
+        { $unwind: '$orderItems' }, // Flatten the array of orderItems
+        {
+            $group: {
+                _id: '$orderItems.productId', // Group by productId
+                totalQuantity: { $sum: '$orderItems.quantity' }, // Sum up quantities
+            },
+        },
+        { $sort: { totalQuantity: -1 } }, // Sort by quantity in descending order
+        { $limit: 10 }, // Limit to top 10 products
+        {
+            $lookup: {
+                from: 'products', // Match the products collection name
+                localField: '_id', // Product ID from grouping
+                foreignField: '_id', // Product ID in products collection
+                as: 'productDetails',
+            },
+        },
+        { $unwind: '$productDetails' }, // Flatten the product details array
+        {
+            $project: {
+                name: '$productDetails.name', // Project product name
+                totalQuantity: 1, // Project totalQuantity
+                images: '$productDetails.images', // Project images
+            },
+        },
+    ]);
+    
+    
+
+    // Fetch top 10 best-selling categories
+    const topCategories = await Order.aggregate([
+      {
+          $lookup: {
+              from: 'orderitems', 
+              localField: 'items', 
+              foreignField: '_id', 
+              as: 'orderItems',
+          },
+      },
+      { $unwind: '$orderItems' }, 
+      {
+          $lookup: {
+              from: 'products', 
+              localField: 'orderItems.productId', 
+              foreignField: '_id', 
+              as: 'productDetails',
+          },
+      },
+      { $unwind: '$productDetails' }, 
+      {
+          $group: {
+              _id: '$productDetails.category', 
+              totalQuantity: { $sum: '$orderItems.quantity' }, 
+          },
+      },
+      { $sort: { totalQuantity: -1 } }, 
+      { $limit: 10 }, 
+      {
+          $project: {
+              name: '$_id', 
+              totalQuantity: 1, 
+          },
+      },
+  ]);
+      
+    
+      res.render('dashboard', {
+          totalRevenue: totalRevenue[0]?.total || 0,
+          totalOrders: totalOrders,
+          totalProducts: totalProducts,
+          totalCategories,
+          monthlyEarnings: monthlyEarnings[0]?.total || 0,
+          bestSellingProducts: topProducts,
+          bestSellingCategories: topCategories,
+      });
+    } catch (error) {
+        console.error('Error rendering dashboard:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
 const renderUsers=async(req,res)=>{
@@ -134,7 +251,6 @@ const renderEditProduct = async (req, res) => {
   const unblockUser = async (req,res)=>{
     
     const id=req.params.id
-    console.log(id);
     try {
       await User.findByIdAndUpdate({_id:id},{$set:{blocked:false}})
       return res.redirect('/admin/users')
@@ -462,10 +578,9 @@ const renderadminOrderdetails = async(req,res)=>{
   })
   .populate({
       path: 'user', 
-      model: 'User'
+      model: 'User' 
   })
   .sort({ createdAt: -1 });
-  console.log(order);
   
     res.render('adminOrdersdetail',{order})
 } catch (error) {
@@ -476,7 +591,6 @@ const renderadminOrderdetails = async(req,res)=>{
 const changeOrderStatus= async(req,res)=>{
   const id= req.query.id
   const status=req.body.status
-  console.log(status);
   
   try {
     const orderUpdate= await Order.findByIdAndUpdate({_id:id},{$set:{orderStatus:status}})
@@ -519,21 +633,23 @@ const newOffer = async (req, res) => {
           categoryId,
           maxUsage
       } = req.body;
-    
+      console.log(productId)
+      console.log(categoryId)
+     
       const newOffer = new Offers({
-          title,
-          description,
-          discountType,
-          discountValue: Number(discountValue),
-          startDate: new Date(startDate),
-          endDate: new Date(endDate),
-          active: active === 'true',
-          applicableTo,
-          productId: applicableTo === 'product' || applicableTo === 'both' ? productId : [],
-          categoryId: applicableTo === 'category' || applicableTo === 'both' ? categoryId : [],
-          maxUsage: Number(maxUsage),
-          usedCount: 0
-      })
+        title,
+        description,
+        discountType,
+        discountValue: Number(discountValue),
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        active: active === 'true',
+        applicableTo,
+        productId: applicableTo === 'product' || applicableTo === 'both' ? productId : [],
+        categoryId: applicableTo === 'category' || applicableTo === 'both' ? categoryId : [],
+        maxUsage: Number(maxUsage),
+        usedCount: 0
+    });
       await newOffer.save();
       res.status(200).json({ message: 'Offer created successfully' })
   } catch (error) {
@@ -609,7 +725,6 @@ const renderAddCoupon = async (req,res)=>{
   }
 }
 const createCoupon = async (req, res) => {
-  console.log(req.body);
   const { code, name, description, isPercent, amount, expireDate, minPurchase, isActive } = req.body;
   try {
     if (!code || !name || !amount || !expireDate || minPurchase == null) {
@@ -643,6 +758,587 @@ const createCoupon = async (req, res) => {
   }
 }
 
+const renderadminOrderitemdetails = async (req, res) => {
+  const itemId = req.query.id
+  const orderId = req.params.id
+
+  try {
+    const order = await Order.findById(orderId)
+      .populate({
+        path: 'items',
+        match: { _id: itemId }, 
+        populate: {
+          path: 'productId',
+          model: 'Product',
+        },
+      })
+      .populate({
+        path: 'user',
+        ref: 'User', //
+      });
+
+    if (!order || !order.items.length) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order or item not found! Please try again.',
+      });
+    }
+
+    const item = order.items[0]
+    const orderStatus = item.orderStatus
+
+    let statusOptions = []
+    let showSaveButton = true;
+
+    if (orderStatus === 'delivered') {
+      showSaveButton = false
+    } else if (orderStatus === 'returned') {
+      statusOptions = ['refunded', 'rejected']
+    } else {
+      statusOptions = ['pending', 'confirmed', 'canceled', 'shipped', 'delivered']
+      if (orderStatus === 'refunded' || orderStatus === 'rejected') {
+        statusOptions = statusOptions.filter(status => status !== 'refunded' && status !== 'rejected');
+      }
+    }
+
+    res.render('adminorderitemDetail', { order, statusOptions, showSaveButton });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while retrieving the order item.',
+      error: error.message,
+    });
+  }
+}
+const changeReturnStatus = async (req, res) => {
+  const orderId = req.params.id; 
+  const status = req.body.status;
+  const itemId = req.query.id;
+  const userId =req.query.user
+
+  try {
+      const orderItemUpdate = await orderItem.findByIdAndUpdate(
+          itemId,
+          { $set: { orderStatus: status } },
+          { new: true }
+      );
+
+      if (!orderItemUpdate) {
+          return res.status(404).json({ message: "Order item not found." });
+      }
+
+      if (status === 'refunded') {
+          const order = await Order.findById(orderId).populate('items');
+          if (!order) {
+              return res.status(404).json({ message: "Order not found." });
+          }
+
+          const totalOrderPrice = order.totalPrice;
+          const totalDiscount = order.discount;
+          console.log('total discount:',totalDiscount);
+          
+          const orderItem = order.items.find(item => item._id.toString() === itemId);
+        
+          if (!orderItem) {
+              return res.status(404).json({ message: "Item not found in the order." });
+          }
+          let refundAmount = 0;
+          if (totalDiscount !== 0) {
+            const itemPrice = orderItem.price * orderItem.quantity;
+            console.log("itemPrice",itemPrice);
+            
+            const proportionOfDiscount = (itemPrice / totalOrderPrice) * totalDiscount;
+            console.log("proportionOfDiscount",proportionOfDiscount);
+            
+            refundAmount = Math.min(proportionOfDiscount, totalDiscount);
+        } else {
+            refundAmount = orderItem.price*orderItem.quantity
+        }
+        console.log('refundamount',refundAmount);
+        
+        
+        if (order.paymentMethod === 'Razorpay' || order.paymentMethod === 'Wallet') {
+          const wallet = await Wallet.findOne({ user: userId });
+          
+            if (wallet) {
+                wallet.balance += refundAmount;
+                try {
+                    await wallet.save();
+                } catch (error) {
+                    console.error('Error saving wallet:', error);
+                    return res.status(500).json({ message: "Error updating wallet balance." });
+                }
+
+                const transaction = new Transactions({
+                    user: order.user,
+                    amount: refundAmount,
+                    type: 'credit',
+                    description: `Refund for returned order item ${itemId}`,
+                });
+                  
+                try {
+                    await transaction.save();
+                } catch (error) {
+                    console.error('Error creating transaction:', error);
+                    return res.status(500).json({ message: "Error creating transaction." });
+                }
+
+                wallet.transactions.push(transaction._id);
+                await wallet.save();
+            } else {
+                console.error('Wallet not found for user:', userId);
+                return res.status(404).json({ message: "Wallet not found." });
+            }
+        }
+
+        order.totalPrice -= refundAmount;
+        await order.save();
+
+        const allItemsCanceled = order.items.every(item => item.orderStatus === 'returned');
+        if (allItemsCanceled) {
+            await Order.findByIdAndUpdate(
+                orderId,
+                { $set: { orderStatus: 'returned' } },
+                { new: true }
+            );
+        }
+
+        const allItemRefunded = order.items.every(item => item.orderStatus === 'refunded');
+        if (allItemRefunded) {
+            await Order.findByIdAndUpdate(
+                orderId,
+                { $set: { orderStatus: 'refunded' } },
+                { new: true }
+            );
+        }
+    }
+
+    return res.redirect('/admin/order-list');
+  } catch (error) {
+      console.error("Error updating order item status:", error);
+      return res.status(500).json({ message: "An error occurred while updating the order item status." });
+  }
+};
+
+
+const renderSalesReport = async (req, res) => {
+  try {
+      const orders = await Order.find()
+          .populate({
+              path: 'items',
+              populate: {
+                  path: 'productId',
+                  model: 'Product'
+              }
+          })
+          .populate({
+              path: 'user',
+              model: 'User'
+          })
+          .sort({ createdAt: -1 });
+
+      let totalSales = 0
+      let totalOrders = orders.length 
+      let totalDiscount = 0;
+
+      orders.forEach(order => {
+          totalSales += order.totalPrice
+          totalDiscount += order.discount || 0
+      });
+
+      const netSales = totalSales - totalDiscount;
+
+      res.render('salesReport', { 
+          orders, 
+          totalSales, 
+          totalOrders, 
+          totalDiscount, 
+          netSales 
+      });
+  } catch (error) {
+      console.error("Error fetching sales report:", error);
+      res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+const filterReport = async (req, res) => {
+  const { reportType, startDate, endDate } = req.body;
+  let orders;
+
+  try {
+      const match = {};
+      const today = new Date();
+
+      if (reportType === 'daily') {
+          const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+          const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+          match.createdAt = { $gte: startOfDay, $lte: endOfDay };
+      } else if (reportType === 'weekly') {
+          const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+          const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+          match.createdAt = { $gte: startOfWeek, $lte: endOfWeek };
+      } else if (reportType === 'monthly') {
+          const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          match.createdAt = { $gte: startOfMonth, $lte: endOfMonth };
+      } else if (reportType === 'custom' && startDate && endDate) {
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999); 
+          match.createdAt = { $gte: start, $lte: end };
+      }
+
+      orders = await Order.find(match)
+          .populate({
+              path: 'items',
+              populate: {
+                  path: 'productId',
+                  model: 'Product'
+              }
+          })
+          .populate({
+              path: 'user',
+              model: 'User'
+          }).sort({ createdAt: -1 });
+
+      res.json({ success: true, orders });
+  } catch (error) {
+      console.error("Error generating report:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+const downloadPdf = async (req, res) => {
+  
+  const { reportType, startDate, endDate } = req.body;
+console.log("dsdsdsd,",endDate);
+
+  try {
+    const match = {};
+    const today = new Date();
+
+    switch (reportType) {
+      case 'daily':
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+        match.createdAt = { $gte: startOfDay, $lte: endOfDay };
+        break;
+      case 'weekly':
+        const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+        const endOfWeek = new Date(new Date(startOfWeek).setDate(startOfWeek.getDate() + 6));
+        match.createdAt = { $gte: startOfWeek, $lte: endOfWeek };
+        break;
+      case 'monthly':
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        match.createdAt = { $gte: startOfMonth, $lte: endOfMonth };
+        break;
+      case 'custom':
+        if (startDate && endDate) {
+          const customStartDate = new Date(startDate);
+          const customEndDate = new Date(endDate);
+          customEndDate.setHours(23, 59, 59, 999)
+          match.createdAt = { $gte: customStartDate, $lte: customEndDate };
+        } else {
+          throw new Error('Start date and end date are required for custom report type');
+        }
+        break;
+      default:
+        throw new Error('Invalid report type');
+    }
+
+    const orders = await Order.find(match)
+      .populate({
+        path: 'items',
+        populate: {
+          path: 'productId',
+          model: 'Product',
+        },
+      })
+      .populate({
+        path: 'user',
+        model: 'User',
+      });
+
+    const pdf = new PDFDocument();
+    const filename = `sales_report_${new Date().toISOString().split('T')[0]}.pdf`;
+    res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-type', 'application/pdf');
+
+    pdf.pipe(res);
+
+    pdf.fontSize(18).text('Sales Report', { align: 'center' }).moveDown();
+
+    pdf.fontSize(12).text(`Report Type: ${reportType.charAt(0).toUpperCase() + reportType.slice(1)}`).moveDown(0.5);
+    if (reportType === 'custom') {
+      pdf.text(`Date Range: ${new Date(startDate).toLocaleDateString()} - ${new Date(endDate).toLocaleDateString()}`).moveDown();
+    }
+
+    const tableTop = 150;
+    const rowHeight = 30;
+    const columnWidths = [100, 120, 100, 80, 80, 80];
+    const startX = 50;
+
+    const drawRow = (rowY, isHeader = false) => {
+      pdf
+        .moveTo(startX, rowY)
+        .lineTo(startX + columnWidths.reduce((a, b) => a + b), rowY)
+        .stroke();
+
+      if (isHeader) {
+        pdf.font('Helvetica-Bold').fontSize(12);
+      } else {
+        pdf.font('Helvetica').fontSize(10);
+      }
+    };
+
+    const drawBorders = (rowY) => {
+      let x = startX;
+      columnWidths.forEach((width) => {
+        pdf.moveTo(x, rowY).lineTo(x, rowY + rowHeight).stroke();
+        x += width;
+      });
+      pdf.moveTo(x, rowY).lineTo(x, rowY + rowHeight).stroke();
+    };
+
+    const addRowText = (data, rowY) => {
+      let x = startX;
+      data.forEach((text, i) => {
+        pdf.text(text, x + 5, rowY + 10, { width: columnWidths[i] - 10, align: 'left' });
+        x += columnWidths[i];
+      });
+    };
+
+    drawRow(tableTop, true);
+    addRowText(
+      ['Date', 'Order ID', 'Customer', 'Total', 'Discount', 'Net Amount'],
+      tableTop
+    );
+    drawBorders(tableTop);
+
+    let y = tableTop + rowHeight;
+    let totalSales = 0;
+    let totalDiscount = 0;
+
+    orders.forEach((order) => {
+      drawRow(y);
+      const netAmount = order.totalPrice - (order.discount || 0);
+      addRowText(
+        [
+          new Date(order.createdAt).toLocaleDateString(),
+          order.orderNo,
+          order.user ? order.user.name : 'N/A',
+          `₹${order.totalPrice.toFixed(2)}`,
+          `₹${(order.discount || 0).toFixed(2)}`,
+          `₹${netAmount.toFixed(2)}`,
+        ],
+        y
+      );
+      drawBorders(y);
+      y += rowHeight;
+
+      totalSales += order.totalPrice;
+      totalDiscount += (order.discount || 0);
+    });
+
+    // Add summary
+    y += 20;
+    pdf.font('Helvetica-Bold').fontSize(12);
+    pdf.text(`Total Sales: ₹${totalSales.toFixed(2)}`, startX, y);
+    y += 20;
+    pdf.text(`Total Discount: ₹${totalDiscount.toFixed(2)}`, startX, y);
+    y += 20;
+    pdf.text(`Net Sales: ₹${(totalSales - totalDiscount).toFixed(2)}`, startX, y);
+
+    pdf.end();
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+};
+
+
+const downloadExcel = async (req, res) => {
+  const { reportType, startDate, endDate } = req.body;
+  console.log(reportType);
+  
+  try {
+      const match = {};
+      const today = new Date();
+
+      if (reportType === 'daily') {
+          const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+          const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+          match.createdAt = { $gte: startOfDay, $lte: endOfDay };
+      } else if (reportType === 'weekly') {
+          const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+          const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+          match.createdAt = { $gte: startOfWeek, $lte: endOfWeek };
+      } else if (reportType === 'monthly') {
+          const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          match.createdAt = { $gte: startOfMonth, $lte: endOfMonth };
+      } else if (reportType === 'custom' && startDate && endDate) {
+          match.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+      }
+
+      const orders = await Order.find(match)
+          .populate({
+              path: 'items',
+              populate: {
+                  path: 'productId',
+                  model: 'Product'
+              }
+          })
+          .populate({
+              path: 'user',
+              model: 'User'
+          })
+          .sort({ createdAt: -1 });
+
+      console.log(orders);
+      
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Sales Report');
+
+      worksheet.columns = [
+          { header: 'Date', key: 'date', width: 15 },
+          { header: 'Order ID', key: 'orderId', width: 15 },
+          { header: 'Customer', key: 'customer', width: 30 },
+          { header: 'Total', key: 'total', width: 15 },
+          { header: 'Discount', key: 'discount', width: 15 },
+          { header: 'Net Amount', key: 'netAmount', width: 15 }
+      ];
+
+      orders.forEach(order => {
+          const netAmount = order.totalPrice - (order.discount || 0);
+          worksheet.addRow({
+              date: new Date(order.createdAt).toLocaleDateString(),
+              orderId: order.orderNo,
+              customer: order.user ? order.user.name : 'N/A',
+              total: order.totalPrice,
+              discount: order.discount || 0,
+              netAmount: netAmount
+          });
+      });
+
+      res.setHeader('Content-Disposition', `attachment; filename=sales_report_${new Date().toISOString().split('T')[0]}.xlsx`);
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+      await workbook.xlsx.write(res);
+      res.end();
+  } catch (error) {
+      console.error("Error generating Excel:", error);
+      res.status(500).send("Internal Server Error");
+  }
+};
+
+const adminSalesData = async(req,res)=>{
+  const { filter, startDate, endDate } = req.query;
+  let start, end;
+
+  try {
+      if (filter === 'yearly') {
+          const year = new Date().getFullYear();
+          start = new Date(`${year}-01-01`);
+          end = new Date(`${year}-12-31`);
+      } else if (filter === 'monthly') {
+          const year = new Date().getFullYear();
+          const month = new Date().getMonth() + 1;
+          start = new Date(`${year}-${month}-01`);
+          end = new Date(`${year}-${month + 1}-01`);
+      } else if (filter === 'custom') {
+          start = new Date(startDate);
+          end = new Date(endDate);
+      }
+
+      const salesData = await Order.aggregate([
+          {
+              $match: {
+                  createdAt: { $gte: start, $lte: end }
+              }
+          },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  totalSales: { $sum: "$totalPrice" }
+              }
+          },
+          { $sort: { _id: 1 } }
+      ]);
+      
+      res.status(200).json({ success: true, salesData });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+const getBestSellingItems = async (req, res) => {
+  try {
+      const { type } = req.query;
+
+      let groupByField, lookupCollection;
+
+      if (type === 'products') {
+          groupByField = '$items.productId';
+          lookupCollection = 'products';
+      } else if (type === 'categories') {
+          groupByField = '$items.productId.category';
+          lookupCollection = 'categories';
+      } else {
+          return res.status(400).json({ success: false, message: 'Invalid type parameter' });
+      }
+
+      const aggregationPipeline = [
+          { $unwind: '$items' },
+          {
+              $lookup: {
+                  from: 'orderitems',
+                  localField: 'items',
+                  foreignField: '_id',
+                  as: 'orderItemDetails',
+              },
+          },
+          { $unwind: '$orderItemDetails' },
+          {
+              $group: {
+                  _id: groupByField,
+                  totalQuantity: { $sum: '$orderItemDetails.quantity' },
+              },
+          },
+          { $sort: { totalQuantity: -1 } },
+          { $limit: 10 },
+          {
+              $lookup: {
+                  from: lookupCollection,
+                  localField: '_id',
+                  foreignField: '_id',
+                  as: `${type}Details`,
+              },
+          },
+          { $unwind: `$${type}Details` },
+          {
+              $project: {
+                  name: `$${type}Details.name`,
+                  totalQuantity: 1,
+              },
+          },
+      ];
+
+      const bestSellingItems = await Order.aggregate(aggregationPipeline);
+
+      return res.status(200).json({ success: true, data: bestSellingItems });
+  } catch (error) {
+      console.error('Error fetching best-selling items:', error);
+      return res.status(500).json({ success: false, message: 'Failed to fetch best-selling items' });
+  }
+};
+  
+
+
 module.exports={
     renderDashboard,
     renderUsers,
@@ -672,7 +1368,16 @@ module.exports={
     unlistOffers,
     deleteOffers,
     renderAddCoupon,
-    createCoupon
+    createCoupon,
+    renderadminOrderitemdetails,
+   changeReturnStatus,
+   renderSalesReport,
+   filterReport,
+   downloadPdf,
+   downloadExcel,
+   adminSalesData,
+   getBestSellingItems
+
 
     
 }

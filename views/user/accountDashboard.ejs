@@ -91,9 +91,9 @@
                                 <a href="wishlist.html"><i class="fa fa-heart-o"></i></a>
                             </div>
                             <div class="same-style cart-wrap">
-                                <a href="#" class="cart-active">
+                                <a href="/user/cart" >
                                     <i class="dlicon shopping_bag-20"></i>
-                                    <span class="count-style">02</span>
+                                    <!-- <span class="count-style">02</span> -->
                                 </a>
                             </div>
                             <div class="same-style header-search">
@@ -125,9 +125,9 @@
                         <div class="mobile-header-right-wrap">
                             <div class="header-right-wrap header-right-flex">
                                 <div class="same-style cart-wrap">
-                                    <a href="#" class="cart-active">
+                                    <a href="/user/cart" >
                                         <i class="dlicon shopping_bag-20"></i>
-                                        <span class="count-style">02</span>
+                                        <!-- <span class="count-style">02</span> -->
                                     </a>
                                 </div>
                                 <div class="same-style header-off-canvas">
@@ -152,48 +152,7 @@
                 </form>
             </div>
         </div>
-        <!-- mini cart start -->
-        <div class="sidebar-cart-active">
-            <div class="sidebar-cart-all">
-                <a class="cart-close" href="#"><i class="dlicon ui-1_simple-remove"></i></a>
-                <div class="cart-content">
-                    <h3>Shopping Cart</h3>
-                    <ul>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-1.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Bejewelled velvet sandals</a></h4>
-                                <span> 1 × $49.00 </span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-2.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Contrast faux fur jacket</a></h4>
-                                <span> 1 × $49.00 </span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="cart-total">
-                        <h4>Subtotal: <span>$170.00</span></h4>
-                    </div>
-                    <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="/user/cart">view cart</a>
-                        <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         <!-- aside start -->
         <div class="header-aside-active">
             <div class="header-aside-wrap">
@@ -404,7 +363,7 @@
                             <a href="/user/account" class="active">
                                 Dashboard</a>
                                 <a href="/user/account/orders" > Orders</a>
-                                <a href="/user/account/" > Download</a>
+                                <a href="/user/wallet/" > Wallet</a>
                             <a href="/user/account/address"  > address</a>
                             <a href="/user/account-details"> Account Details</a>
                             <a href="login-register.html"> Logout</a>
@@ -466,6 +425,31 @@
 
                                     <p class="mb-0">From your account dashboard. you can view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
                                 </div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: Arial, sans-serif;">
+                                    <button id="referalButton" style="
+                                      background-color: #4CAF50; 
+                                      color: white; 
+                                      border: none; 
+                                      padding: 10px 20px; 
+                                      border-radius: 5px; 
+                                      font-size: 16px; 
+                                      cursor: pointer; 
+                                      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+                                      transition: all 0.3s ease-in-out;">
+                                      Generate Referral Code
+                                    </button>
+                                    <span id="Referalcode" style="
+                                      display: inline-block; 
+                                      margin-top: 10px; 
+                                      font-size: 18px; 
+                                      font-weight: bold; 
+                                      color: #333; 
+                                      padding: 5px 10px; 
+                                      border: 1px dashed #4CAF50; 
+                                      border-radius: 5px; 
+                                      background-color: #f9f9f9;">
+                                    </span>
+                                  </div>
                             </div>
                             
                         </div>
@@ -593,6 +577,39 @@
     <!-- Main JS -->
     <script src="/user/assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
+
+<script>
+  document.getElementById("referalButton").addEventListener("click", function () {
+    // Send a request to the backend
+    fetch("/user/generate-referral", {
+      method: "POST", // Use POST if you're sending data, otherwise GET
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: "12345" }), // Replace with actual data if needed
+    })
+      .then((response) => {
+          
+          if (!response.ok) {
+              throw new Error("Failed to generate referral code");
+            }
+            return response.json()
+        })
+        
+        
+        .then((data) => {
+          console.log(data);
+        document.getElementById("Referalcode").innerText = data.referalcode   || "No code received";
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error(error);
+        document.getElementById("Referalcode").innerText = "Error generating code";
+      });
+  });
+</script>
+
 
 </body>
 

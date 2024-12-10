@@ -9,8 +9,8 @@ const {generateotp,sendOtpMail,sendOtpMail2} =require('../utility/otputility')
 const {generateaccessToken,generateRefreshToken,generateAdminaccessToken,generateAdminRefreshToken}=require('../middleware/accessToken')
 const getFormattedDate=require('../utility/dateFormat')
 const otpModel = require('../models/otpmodel')
-const wallet= require('../models/walletModel') 
 const Wallet = require('../models/walletModel')
+const Transactions = require('../models/transactions')
 require('dotenv').config()
 const securePassword = async(password)=>{
     try{
@@ -25,6 +25,9 @@ const securePassword = async(password)=>{
 const googleAuth =async (req, res) => {
     
     const user = req.user;
+    if (!user) {
+        return res.status(403).render('login', { message: info.message }); // Render an error page or send a message
+    }
     const accessToken = generateaccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
@@ -40,7 +43,6 @@ const googleAuth =async (req, res) => {
         maxAge: 30*24*60*60*1000 // 20 mins
     });
 
-    // Redirect to home page after successful login
     res.redirect('/user/home');
 };
 
@@ -58,7 +60,6 @@ const registerUser = [
 async(req, res) => {
 
     const {email}=req.body
-    // console.log('mail is',email);
     
     const exist= await User.findOne({email})
 
@@ -71,21 +72,26 @@ async(req, res) => {
       return res.render('signup',{message:'user does not exist'})
     }
     try {
-        const spassword = await securePassword(req.body.password)
-        // console.log(spassword,'yes pass');
+        const spassword = await securePassword(req.body.password) 
+        const refcode = req.body.referal
         
+        if (refcode) {
+           const refUser = await User.findOne({referalCode:refcode}) 
+           if(!refUser){
+            return res.render('signup',{message:'Use valid referal code'})
+           }
+        }       
         const user = new tempUser({
             name: req.body.name,
             email,
             password: spassword,
             phone: req.body.number,
+            referal:req.body.referal
 
         })
          await user.save()
-        //  console.log(user);
          const {otp, otpExpiresAt } = generateotp()
-         console.log(otp);
-         
+     
          
         user.otp = otp;
         user.otpExpiredAt = otpExpiresAt;
@@ -95,6 +101,7 @@ async(req, res) => {
 
         const userId = user._id
         const token = jwt.sign({userId}, process.env.JWT_OTP_TOKEN, {expiresIn:'10m'})
+        console.log(token);
         
         res.cookie('token',token,{
             httpOnly:false,
@@ -135,6 +142,36 @@ const verifyOtp = async(req, res)=>{
                 user:user._id
             })
             await wallet.save()
+            if(tempUserData.referal){
+                wallet.balance+=100
+                const newtransaction= new Transactions({
+                    user: user._id,
+                    amount: 100,
+                    type: 'credit',
+                    description: `Signup bonus credited for using a referral code`,
+                });
+                newtransaction.save()
+                wallet.transactions.push(newtransaction._id);
+                await wallet.save(); 
+                const refUSer= await User.findOne({referalCode:tempUserData.referal})
+               if(refUSer){
+                const refWallet= await Wallet.findOne({user:refUSer._id})
+                console.log(refWallet)
+                refWallet.balance += 300
+                const refTransaction =  new Transactions({
+                    user: refUSer._id,
+                    amount: 300,
+                    type: 'credit',
+                    description: `Referral bonus credited for successful signup using your referral code`,
+                })
+                console.log(refTransaction);
+                
+                await refTransaction.save()
+                refWallet.transactions.push(refTransaction._id)
+                await refWallet.save()
+               }
+                
+            }
             return res.redirect('/auth/login')
         }
         else{
@@ -252,28 +289,7 @@ const renderUserSignup =async(req,res)=>{
         console.log('cannot render',error)
     }
 }
-// const renderOtp = async (req, res) => {
 
-
-//     try {
-//         const token = req.cookies.token;
-        
-
-//         if (!token) {
-//             return res.redirect('/auth/signup')
-//         }
-//         const decode = jwt.verify(token, process.env.JWT_OTP_TOKEN)
-//         const checkingUser = decode.userId
-//         const user = await tempUser.findById(checkingUser)
-        
-
-//         return res.render('verificationMail', { expiresAt:user.otpExpiredAt.getTime()})
-//     } catch (error) {
-//         console.error('Token verification failed:', error);
-//         return res.redirect('/auth/signup');
-//     }
-
-// }
 const renderOtp = async (req, res) => {
     try {
         const token = req.cookies.token;
@@ -325,7 +341,7 @@ const userLogin = async(req,res)=>{
         res.cookie('accessToken',accessToken,{
             httpOnly:true,
             secure:process.env.NODE_ENV ==='production',
-            maxAge: 10*60*1000  // set to 1 min
+            maxAge: 10*60*1000  
         })
 
         res.cookie('refreshToken',refreshToken,{

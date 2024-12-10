@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <!-- Keep existing head content -->
+    <style>
+        /* Add these styles to your existing CSS */
+        .order-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .order-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .order-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .order-status-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .info-card {
+            background-color: #fff;
+            border-radius: 6px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .info-card h3 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .info-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .items-table th, .items-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .items-table th {
+            background-color: #f1f3f5;
+            font-weight: bold;
+            color: #333;
+        }
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .product-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .product-size {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .reason-textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Keep existing screen-overlay and aside (sidebar) -->
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/admin/assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">users</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/Categories"> <i
+                            class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <!-- Keep existing header -->
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/admin/assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/admin/assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/admin/assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/admin/assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin/assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Order Details</h2>
+                <p>Details for Order ID: <%= order._id %></p>
+            </div>
+            
+            <div class="order-details">
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order ID: <%= order._id %></div>
+                        <div class="order-date">Placed on: <%= order.createdAt %></div>
+                    </div>
+                    <form class="order-status-form" action="" method="post">
+                        <select class="form-select" name="status" id="status">
+                            <option value="" disabled selected>Change status</option>
+                            <% allowedStatuses.forEach(status => { %>
+                                <option value="<%= status %>"><%= status.charAt(0).toUpperCase() + status.slice(1) %></option>
+                            <% }) %>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a class="btn btn-secondary print ms-2" href="#"><i class="material-icons md-print"></i></a>
+                    </form>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Order Info</h3>
+                        <p>Shipping: Fargo express</p>
+                        <p>Pay method: <%= order.paymentMethod %></p>
+                        <p>Status: <%= currentStatus %></p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Customer</h3>
+                        <p><%= order.user.name %></p>
+                        <p><%= order.user.email %></p>
+                        <p><%= order.user.phone %></p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Deliver to</h3>
+                        <p><%= order.address.firstName %> <%= order.address.lastName %></p>
+                        <p><%= order.address.street %>, <%= order.address.apartment %></p>
+                        <p><%= order.address.city %>, <%= order.address.state %> <%= order.address.zip %></p>
+                    </div>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (order && order.items && order.items.length > 0) { %>
+                            <% order.items.forEach(item => { %>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <img src="/Uploads/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>" class="product-image">
+                                            <div class="product-info">
+                                                <span class="product-name"><%= item.productId.name %></span>
+                                                <span class="product-size">Size: <%= item.size %></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>$<%= item.price.toFixed(2) %></td>
+                                    <td><%= item.quantity %></td>
+                                    <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="mb-3">
+                                            <label for="reason-<%= item._id %>">Reason:</label>
+                                            <textarea id="reason-<%= item._id %>" class="reason-textarea" disabled><%= item.reason %></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="4" class="text-center">No items found in this order.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+
+                <% if(order.paymentMethod != 'Pay On Delivery') { %>
+                    <div class="info-card mt-4">
+                        <h3>Payment Info</h3>
+                        <p>
+                            <img src="/admin/assets/imgs/card-brands/2.png" class="border" height="20" alt="Master Card">
+                            Master Card **** **** 4768
+                        </p>
+                        <p>Business name: Grand Market LLC</p>
+                        <p>Phone: +1 (800) 555-154-52</p>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Keep existing footer -->
+    </main>
+
+    <!-- Keep existing scripts -->
+</body>
+</html>

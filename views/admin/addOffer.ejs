@@ -326,21 +326,20 @@
     <script>
         const products = <%- JSON.stringify(product) %>;
         const categories = <%- JSON.stringify(categories) %>;
-    
+
         function createCheckboxes(items, containerId, name) {
-            const container = document.getElementById(containerId);
-            items.forEach(item => {
-                const checkboxItem = document.createElement('label');
-                checkboxItem.className = 'checkbox-item';
-                checkboxItem.innerHTML = `
-                    <input type="checkbox" name="${name}" value="${item._id}" data-name="${item.name}">
-                    ${item.name}
-                `;
-                container.appendChild(checkboxItem);
-            });
-        }
-    
-        document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById(containerId);
+    items.forEach(item => {
+        const checkboxItem = document.createElement('label');
+        checkboxItem.className = 'checkbox-item';
+        checkboxItem.innerHTML = `
+            <input type="checkbox" name="${name}[]" value="${item._id}" data-name="${item.name}">
+            ${item.name}
+        `;
+        container.appendChild(checkboxItem);
+    });
+}
+    document.addEventListener('DOMContentLoaded', () => {
             createCheckboxes(products, 'product_checkboxes', 'productId');
             createCheckboxes(categories, 'category_checkboxes', 'categoryId');
     
@@ -446,52 +445,69 @@
     }
 
     document.getElementById('offerForm').addEventListener('submit', async function (event) {
-        if (!validateForm()) {
-            event.preventDefault(); // Prevent form submission if validation fails
-            return;
+    if (!validateForm()) {
+        event.preventDefault(); // Prevent form submission if validation fails
+        return;
+    }
+
+    event.preventDefault()
+
+    const formData = new FormData(this);
+    const formObj = {};
+
+    formData.forEach((value, key) => {
+        if (key.endsWith('[]')) {
+            const newKey = key.slice(0, -2)
+            if (!formObj[newKey]) {
+                formObj[newKey] = []
+            }
+            formObj[newKey].push(value); 
+        } else {
+            formObj[key] = value; 
         }
+    });
 
-        event.preventDefault(); // Prevent default form submission
+    console.log("Form Data:", formObj)
 
-        const formData = new FormData(this);
-        const formObj = {};
-        formData.forEach((value, key) => {
-            formObj[key] = value;
+    try {
+        const response = await fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formObj)
         });
 
-        try {
-            const response = await fetch(this.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formObj)
+        const result = await response.json();
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: result.message,
+            }).then(() => {
+                window.location.reload(); 
             });
-
-            const result = await response.json();
-            if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: result.message,
-                }).then(() => {
-                    window.location.reload(); 
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: result.message,
-                });
-            }
-        } catch (error) {
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An unexpected error occurred. Please try again later.',
+                text: result.message,
             });
         }
-    });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An unexpected error occurred. Please try again later.',
+        });
+    }
+});
+
+
+const checkedProducts = document.querySelectorAll('#product_checkboxes input[type="checkbox"]:checked');
+const checkedCategories = document.querySelectorAll('#category_checkboxes input[type="checkbox"]:checked');
+console.log("Checked Products:", Array.from(checkedProducts).map(cb => cb.value));
+console.log("Checked Categories:", Array.from(checkedCategories).map(cb => cb.value));
 
     
             document.addEventListener('DOMContentLoaded', (event) => {

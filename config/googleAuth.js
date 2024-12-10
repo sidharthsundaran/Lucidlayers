@@ -5,36 +5,35 @@ const jwt = require('jsonwebtoken');
 const Wallet= require('../models/walletModel')
 require('dotenv').config()
 
-
-// Passport Google Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'  // Ensure the callback URL matches your Google Console config
+    callbackURL: '/auth/google/callback'  
 },                    
 async (accessToken, refreshToken, profile, done) => {
     try {
-        
-        // Check if user exists in DB, if not, create a new one
         let user = await User.findOne({ email: profile.emails[0].value });
-        if (!user) {
+        if (user) {
+            if (user.blocked) {
+                return done(null, false, { message: 'User  is blocked.' });
+            }   
+        } else {
             user = new User({
                 googleId: profile.id,
-                email: profile.emails[0].value, // Google returns email
+                email: profile.emails[0].value, 
                 name: profile.displayName
             });
             await user.save();
-            let wallet= new Wallet({
-                user:user._id
-            })
-            await wallet.save()
-            return done(null, user);
+
+            const wallet = new Wallet({
+                user: user._id
+            });
+            await wallet.save();
         }
 
-        // Pass the user to the next step (generate JWT token)
         return done(null, user);
     } catch (error) {
-        console.log(error,false);
-        
+        console.error("Error during Google authentication:", error);
+        return done(error);
     }
 }));

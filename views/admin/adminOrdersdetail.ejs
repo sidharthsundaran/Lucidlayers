@@ -32,7 +32,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -42,7 +42,7 @@
                         <span class="text">Products</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active ">
                     <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
@@ -53,14 +53,19 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
+                    <a class="menu-link" href="/admin/offers"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Offers</span>
                     </a>
                 </li>
                 <li class="menu-item ">
                     <a class="menu-link" href="/admin/Categories"> <i
                             class="icon material-icons md-monetization_on"></i>
                         <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/create-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">coupons</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -74,8 +79,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
+                    <a class="menu-link" href="/admin/sales"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">SAles report</span> </a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
@@ -160,15 +165,22 @@
                             <small class="text-muted">Order ID: <%= order._id %></small>
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <form class="form-label" action="" method="post">
-                                <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" id="status">
-                                    <option value="" disabled selected>Change status</option>
-                                    <option value="processing">Processing</option>
-                                    <option value="canceled">Canceled</option>
-                                    <option value="shipped">Shipped</option>
-                                    <option value="delivered">Delivered</option>
-                                </select>
-                                <button type="submit" class="btn btn-primary">Save</button> <!-- Changed to button -->
+                            <form class="form-label" action="/admin/order-details?id=<%= order._id %>" method="post">
+                                <% if (order.orderStatus !== 'delivered') { %>
+                                    <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" id="status">
+                                        <option value="" disabled selected>Change status</option>
+                                        <% if (order.orderStatus !== 'returned' && order.orderStatus !== 'refunded') { %>
+                                            <option value="pending">Pending</option>
+                                            <option value="canceled">Canceled</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="delivered">Delivered</option>
+                                        <% } %>
+                                        <option value="returned">Returned</option>
+                                        <option value="refunded">Refunded</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                <% } %>
                             </form>
                             
                             <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
@@ -199,9 +211,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method:<%= order.paymentMethod %>  <br> Status: new
-                                    </p>
-                                    <a href="#">Download info</a>
+                                        Shipping: Fargo express <br> Pay method:<%= order.paymentMethod %>  <br> Status: <%= order.orderStatus %>
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -227,10 +237,11 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th width="40%">Product</th>
-                                            <th width="20%">Unit Price</th>
-                                            <th width="20%">Quantity</th>
+                                            <th width="30%">Product</th>
+                                            <th width="15%">Unit Price</th>
+                                            <th width="15%">Quantity</th>
                                             <th width="20%" class="text-end">Total</th>
+                                            <th width="20%">Status</th> <!-- New column for Status -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -240,23 +251,33 @@
                                                     <td>
                                                         <a class="itemside" href="#">
                                                             <div class="left">
-                                                                <img src="/Uploads/<%= item.productId.images[0] %>" width="40" height="40" class="img-xs" alt="Item"> <!-- Assuming productId contains images -->
+                                                                <img src="/Uploads/<%= item.productId.images[0] %>" width="40" height="40" class="img-xs" alt="Item">
                                                             </div>
-                                                            <div class="info"> <%= item.productName %> <%= item.size %> size </div> <!-- Corrected to use productName -->
+                                                            <div class="info">
+                                                                <a href="/admin/order/orderItemDetail/<%=order._id%>?id=<%= item._id %>&user=<%= order.user._id %>">
+                                                                    <%= item.productName %>
+                                                                </a> <%= item.size %> size
+                                                            </div>
                                                         </a>
                                                     </td>
-                                                    <td> <%= item.price %> </td> <!-- Corrected to use price -->
-                                                    <td> <%= item.quantity %> </td> <!-- Display the quantity from the item -->
-                                                    <td class="text-end"> <%= (item.price * item.quantity).toFixed(2) %> </td> <!-- Calculate total for the item -->
+                                                    <td><%= item.price %></td>
+                                                    <td><%= item.quantity %></td>
+                                                    <td class="text-end"><%= (item.price * item.quantity).toFixed(2) %></td>
+                                                    <td>
+                                                        <span style =" <%= item.orderStatus === 'returned' || item.orderStatus === 'canceled' ? 'color: red;' : '' %>">
+                                                            <%= item.orderStatus %>
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                             <% }) %>
                                         <% } else { %>
                                             <tr>
-                                                <td colspan="4" class="text-center">No items found in this order.</td>
+                                                <td colspan="5" class="text-center">No items found in this order.</td>
                                             </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
+                                
                             </div> <!-- table-responsive// -->
                         </div> <!-- col// -->
                         <div class="col-lg-1"></div>
@@ -278,11 +299,11 @@
                                 </div>
                                 <button class="btn btn-primary">Save note</button>
                             </div>
-                        </div> <!-- col// -->
+                        </div>
                     </div>
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
-        </section> <!-- content-main end// -->
+                </div> 
+            </div> 
+        </section> 
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">

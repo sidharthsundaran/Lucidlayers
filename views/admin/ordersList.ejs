@@ -24,7 +24,7 @@
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="index.html" class="brand-wrap">
-                <img src="assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+                <img src="/admin/assets/imgs/theme/Logo2.png" class="logo" alt="Evara Dashboard">
             </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
@@ -42,8 +42,8 @@
                         <span class="text">Products</span>
                     </a>
                 </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                <li class="menu-item active ">
+                    <a class="menu-link" href="order-list"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                 </li>
@@ -52,15 +52,20 @@
                         <span class="text">users</span>
                     </a>
                 </li>
-                <li class="menu-item active">
-                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/offers"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Offers</span>
                     </a>
                 </li>
                 <li class="menu-item ">
                     <a class="menu-link" href="/admin/Categories"> <i
                             class="icon material-icons md-monetization_on"></i>
                         <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/create-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">coupons</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -74,8 +79,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
+                    <a class="menu-link" href="/admin/sales"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">SAles report</span> </a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
@@ -178,15 +183,19 @@
                 </header> <!-- card-header end// -->
                 <div class="card-body">
                     <div class="table-responsive">
+                        <% function hasReturnedItem(order) {
+                            return order.items.some(item => item.orderStatus === 'returned');
+                        } %>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Items</th> <!-- New column for Items -->
+                                    <th scope="col">Items</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Payment</th>
                                     <th scope="col">Date</th>
                                     <th scope="col" class="text-end">Action</th>
                                 </tr>
@@ -196,9 +205,15 @@
                                     <% orders.forEach(order => { %>
                                         <tr>
                                             <td><%= order.orderNo %></td>
-                                            <td><b><%= order.user.name %></b></td>
-                                            <td><template class="__cf_email__" data-cfemail="<%= order.user.email %>">[email&#160;protected]</template></td>
-                                            <td><%= order.items.length %></td> <!-- Display the number of items -->
+                                            <td>
+                                                <b style="<%= hasReturnedItem(order) ? 'color: red;' : '' %>">
+                                                    <%= order.user ? order.user.name : 'User Not Found' %>
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <template class="__cf_email__" data-cfemail="<%= order.user ? order.user.email : 'email not found' %>">[email&#160;protected]</template>
+                                            </td>
+                                            <td><%= order.items.length %></td>
                                             <td><%= order.totalPrice %></td>
                                             <td>
                                                 <% if (order.orderStatus === 'canceled') { %>
@@ -207,19 +222,11 @@
                                                     <span class="badge rounded-pill alert-warning"><%= order.orderStatus %></span>
                                                 <% } %>
                                             </td>
-                                            <td><%= order.createdAt.toISOString().split('T')[0] %></td> <!-- Format date as needed -->
+                                            <td><%= order.paymentMethod %></td>
+                                            <td><%= order.createdAt.toISOString().split('T')[0] %></td>
                                             <td class="text-end">
-                                                <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                                <a href="/admin/order-details?id=<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                                 <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
-                                                        <i class="material-icons md-more_horiz"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="/admin/order-details?id=<%= order._id %>">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> <!-- dropdown //end -->
                                             </td>
                                         </tr>
                                     <% }) %>
@@ -230,6 +237,7 @@
                                 <% } %>
                             </tbody>
                         </table>
+                        
                     </div> <!-- table-responsive //end -->
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->

@@ -176,9 +176,9 @@
                                 <a href="/user/wishlist"><i class="fa fa-heart-o"></i></a>
                             </div>
                             <div class="same-style cart-wrap">
-                                <a href="#" class="cart-active">
+                                <a href="/user/cart" >
                                     <i class="dlicon shopping_bag-20"></i>
-                                    <span class="count-style">02</span>
+                                    <!-- <span class="count-style">02</span> -->
                                 </a>
                             </div>
                             <div class="same-style header-search">
@@ -210,9 +210,9 @@
                         <div class="mobile-header-right-wrap">
                             <div class="header-right-wrap header-right-flex">
                                 <div class="same-style cart-wrap">
-                                    <a href="#" class="cart-active">
+                                    <a href="/user/cart" >
                                         <i class="dlicon shopping_bag-20"></i>
-                                        <span class="count-style">02</span>
+                                        <!-- <span class="count-style">02</span> -->
                                     </a>
                                 </div>
                                 <div class="same-style header-off-canvas">
@@ -238,7 +238,7 @@
             </div>
         </div>
         <!-- mini cart start -->
-        <div class="sidebar-cart-active">
+        <!-- <div class="sidebar-cart-active">
             <div class="sidebar-cart-all">
                 <a class="cart-close" href="#"><i class="dlicon ui-1_simple-remove"></i></a>
                 <div class="cart-content">
@@ -278,7 +278,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- aside start -->
         <div class="header-aside-active">
             <div class="header-aside-wrap">
@@ -442,8 +442,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% if (wishlist && wishlist.products.length > 0) { %>
-                                                    <% for (let product of wishlist.products) { %>
+                                                <% if (wishlist && wishlist.length > 0) { %>
+                                                    <% for (let product of wishlist) { %>
                                                         <tr>
                                                             <td class="wishlist-remove">
                                                                 <a href="#" onclick="removeFromWishlist('<%= product._id %>')">
@@ -460,7 +460,6 @@
                                                             </td>
                                                             <td class="wishlist-stock">
                                                                 <% 
-                                                                // Check if any size variation is in stock
                                                                 const inStock = product.sizeVariations.some(variation => variation.stock > 0);
                                                                 %>
                                                                 <% if (inStock) { %>
@@ -470,7 +469,12 @@
                                                                 <% } %>
                                                             </td>
                                                             <td class="wishlist-price">
-                                                                <span class="amount">$<%= product.sizeVariations.length > 0 ? product.sizeVariations[0].price.toFixed(2) : 'N/A' %></span>
+                                                                <% if (product.hasOffer) { %>
+                                                                    <span style="color: red; text-decoration: line-through;">$<%= product.originalPrice.toFixed(2) %></span>
+                                                                    <span style="color: black;"> $<%= product.bestPrice.toFixed(2) %></span>
+                                                                <% } else { %>
+                                                                    <span>$<%= product.originalPrice.toFixed(2) %></span>
+                                                                <% } %>
                                                             </td>
                                                             <% if (inStock) { %>
                                                                 <td class="wishlist-cart">

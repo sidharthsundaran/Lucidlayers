@@ -32,12 +32,12 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active">
                     <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -53,14 +53,19 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="/admin/newproducts"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
+                    <a class="menu-link" href="/admin/offers"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Offers</span>
                     </a>
                 </li>
                 <li class="menu-item ">
                     <a class="menu-link" href="/admin/Categories"> <i
                             class="icon material-icons md-monetization_on"></i>
                         <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/create-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">coupons</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -74,8 +79,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
+                    <a class="menu-link" href="/admin/sales"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">SAles report</span> </a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
@@ -202,21 +207,7 @@
                             <div class="col-lg-2 col-sm-2 col-4 col-date">
                                 <span><%= data[i].createdAt %></span>
                             </div>
-                            <!-- <div class="col-lg-3 col-sm-2 col-4 col-action text-end">
-                                <a href="#" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i> Archive
-                                </a>
-                                <button class="btn btn-sm btn-light rounded">
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="/admin/products/view?id=<%= data[i]._id %>">View Details</a></li>
-                                        <li><a class="dropdown-item" href="/admin/products/edit?id=<%= data[i]._id %>">Edit</a></li>
-                                    </ul>
-                                </button>
-                                
-                                <a href="" class="btn btn-sm font-sm btn-light rounded">
-                                    <i class="material-icons md-delete_forever"></i> Delete
-                                </a>
-                            </div> -->
+                           
                             <div class="col-lg-3 col-sm-2 col-4 col-action text-end">
                                 <% if( data[i].status ==false){ %>
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#blockModal" data-userId="<%= data[i]._id %>">archive</button>
@@ -224,7 +215,6 @@
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#unblockModal" data-userId="<%= data[i]._id %>">Unarchive</button>
                                         <% } %>
                                 
-                                <!-- Dropdown for details and edit -->
                                 <div class="dropdown d-inline-block">
                                     <button class="btn btn-sm btn-light rounded dropdown-toggle" type="button" id="dropdownMenuButton<%= i %>" data-bs-toggle="dropdown" aria-expanded="false">
                                         Details

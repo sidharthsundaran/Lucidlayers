@@ -35,7 +35,10 @@ const userSchema = new mongoose.Schema({
     coupons:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'DiscountCodes'
-    }]
+    }],
+    referalCode:{
+        type:String
+    }
 
 },{timestamps:true})
 

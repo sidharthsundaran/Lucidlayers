@@ -33,6 +33,9 @@ app.use(flash());
 app.use('/auth',authRouter)
 app.use('/user',verifyRefreshToken,userRouter)
 app.use('/admin',verifyAdminRefreshToken,adminRouter)
+app.use('/*',(req,res)=>{
+    res.render('404')
+})
 
 
 async function server() {

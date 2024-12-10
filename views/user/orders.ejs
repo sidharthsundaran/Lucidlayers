@@ -216,9 +216,9 @@ body {
                                 <a href="wishlist.html"><i class="fa fa-heart-o"></i></a>
                             </div>
                             <div class="same-style cart-wrap">
-                                <a href="#" class="cart-active">
+                                <a href="/user/cart" >
                                     <i class="dlicon shopping_bag-20"></i>
-                                    <span class="count-style">02</span>
+                                    <!-- <span class="count-style">02</span> -->
                                 </a>
                             </div>
                             <div class="same-style header-search">
@@ -250,9 +250,9 @@ body {
                         <div class="mobile-header-right-wrap">
                             <div class="header-right-wrap header-right-flex">
                                 <div class="same-style cart-wrap">
-                                    <a href="#" class="cart-active">
+                                    <a href="/user/cart" >
                                         <i class="dlicon shopping_bag-20"></i>
-                                        <span class="count-style">02</span>
+                                        <!-- <span class="count-style">02</span> -->
                                     </a>
                                 </div>
                                 <div class="same-style header-off-canvas">
@@ -278,47 +278,7 @@ body {
             </div>
         </div>
         <!-- mini cart start -->
-        <div class="sidebar-cart-active">
-            <div class="sidebar-cart-all">
-                <a class="cart-close" href="#"><i class="dlicon ui-1_simple-remove"></i></a>
-                <div class="cart-content">
-                    <h3>Shopping Cart</h3>
-                    <ul>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-1.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Bejewelled velvet sandals</a></h4>
-                                <span> 1 × $49.00 </span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-2.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Contrast faux fur jacket</a></h4>
-                                <span> 1 × $49.00 </span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="cart-total">
-                        <h4>Subtotal: <span>$170.00</span></h4>
-                    </div>
-                    <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="/user/cart">view cart</a>
-                        <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
         <!-- aside start -->
         <div class="header-aside-active">
             <div class="header-aside-wrap">
@@ -529,7 +489,7 @@ body {
                             <a href="/user/account">
                                 Dashboard</a>
                             <a href="/user/account/orders" class="active"> Orders</a>
-                            <a href="/user/account/" > Download</a>
+                            <a href="/user/wallet/" > Wallet</a>
                             <a href="/user/account/address"  > address</a>
                             <a href="/user/account-details"> Account Details</a>
                             <a href="login-register.html"> Logout</a>
@@ -588,7 +548,7 @@ body {
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <form action="/user/checkout" method="post">
+                                                    <form  method="post">
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <h1 class="mb-4">Your Orders</h1>
@@ -607,7 +567,7 @@ body {
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                            <% order.items.forEach(item => { %>
+                                                                                    <% order.items.forEach(item => { %>
                                                                                         <tr>
                                                                                             <td>
                                                                                                 <div class="d-flex align-items-center">
@@ -619,13 +579,15 @@ body {
                                                                                             <td>$<%= item.price.toFixed(2) %></td>
                                                                                             <td><%= item.quantity %></td>
                                                                                             <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
-                                                                                            <% if (order.orderStatus=='canceled'){ %>
-                                                                                                <td style="color: #c82333;"><strong><%= order.orderStatus %></strong></td>
-                                                                                                <%} else if(item.orderStatus=='canceled'){ %>
-                                                                                                    <td style="color: #c82333;"><strong><%= item.orderStatus %></strong></td>  
-                                                                                                <% }else{ %>
-                                                                                            <td><%= item.orderStatus %></td>
-                                                                                            <% } %>
+                                                                                            <td>
+                                                                                                <% if (order.orderStatus == 'canceled') { %>
+                                                                                                    <span style="color: #c82333;"><strong><%= order.orderStatus %></strong></span>
+                                                                                                <% } else if (order.orderStatus == 'delivered') { %>
+                                                                                                    <span style="color: green;"><strong><%= order.orderStatus %></strong></span>
+                                                                                                <% } else { %>
+                                                                                                    <%= item.orderStatus %>
+                                                                                                <% } %>
+                                                                                            </td>
                                                                                         </tr>
                                                                                     <% }); %>
                                                                                 </tbody>
@@ -634,11 +596,20 @@ body {
                                                                                 <a href="/user/account/view-order?id=<%= order._id %>">
                                                                                     <button class="btn btn-info btn-sm" type="button">View Details</button>
                                                                                 </a>
-                                                                                <% if (order.orderStatus!='canceled'){ %>
-
-                                                                                <a href="/user/account/cancel-order?id=<%= order._id %>">
-                                                                                    <button class="btn btn-danger btn-sm" type="button">Cancel Order</button>
-                                                                                </a>
+                                                                                <% if (order.orderStatus !== 'canceled' && order.orderStatus !== 'returned' && order.orderStatus !== 'refunded') { %>
+                                                                                    <% if (order.orderStatus !== 'delivered') { %>
+                                                                                        <a href="/user/account/cancel-order?id=<%= order._id %>">
+                                                                                            <button class="btn btn-danger btn-sm" type="button">Cancel Order</button>
+                                                                                        </a>
+                                                                                    <% } %>
+                                                                                    <% if (order.orderStatus === 'pending') { %>
+                                                                                        <button 
+                                                                                            class="btn btn-info btn-sm" 
+                                                                                            type="button" 
+                                                                                            onclick="retryPayment('<%= order._id %>', '<%= order.razorpayOrderId %>', '<%= order.totalPrice %>', '<%= order.address._id %>')">
+                                                                                            Retry Payment
+                                                                                        </button>
+                                                                                    <% } %>
                                                                                 <% } %>
                                                                             </div>
                                                                         </div>
@@ -646,6 +617,7 @@ body {
                                                                 <% } else { %>
                                                                     <p class="text-center">You have no orders.</p>
                                                                 <% } %>
+                                                                
                                                             </div>
                                                         </div>
                                                     </form>
@@ -778,8 +750,90 @@ body {
     <!-- Main JS -->
     <script src="/user/assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-   
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+   
+    <script>
+        function retryPayment(orderId, razorpayOrderId, amount, addressId) {
+            console.log('Order ID:', orderId, 'Razorpay Order ID:', razorpayOrderId, 'Amount:', amount, 'Address ID:', addressId);
+            
+            const options = {
+                key: 'rzp_test_PAS4WBypQAT4o0', 
+                amount: amount * 100, 
+                currency: "INR",
+                name: "LucidLayers",
+                description: "Order Description",
+                order_id: razorpayOrderId,
+                handler: function (response) {
+                    
+                    fetch('/user/retry-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            orderId: orderId,
+                            payment_id: response.razorpay_payment_id,
+                            signature: response.razorpay_signature,
+                            addressId: addressId
+                        }),
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                        console.log('Server response:', result);
+                        if (result.success) {
+                            window.location.href = `/user/order/confirmation/${orderId}`;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Payment verification failed.',
+                                text: result.message,
+                                toast: true,
+                                position: 'top',
+                                timer: 3000,
+                                showConfirmButton: false,
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An error occurred.',
+                            text: 'Please try again later.',
+                            toast: true,
+                            position: 'top',
+                            timer: 3000,
+                            showConfirmButton: false,
+                        });
+                    });
+                },
+                modal: {
+                    ondismiss: function () {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Payment canceled.',
+                            text: 'You can retry the payment anytime.',
+                            toast: true,
+                            position: 'top',
+                            timer: 3000,
+                            showConfirmButton: false,
+                        });
+                    },
+                },
+                prefill: {
+                    name: "Customer Name",
+                    email: "customer@example.com",
+                    contact: "7012872516"
+                },
+                theme: {
+                    color: "black"
+                }
+            };
+        
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+        </script>
+    
 
 </body>
 

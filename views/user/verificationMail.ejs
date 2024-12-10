@@ -123,69 +123,7 @@
             </form>
         </div>
     </div>
-    <script>
-//         const expiresAt = parseInt("<%= expiresAt %>");
-//         const currentTime = Date.now();
-//         let timeLeft = Math.floor((expiresAt - currentTime) / 1000); // Remaining seconds
 
-//         const timerElement = document.getElementById("timer");// Get the timer and Resend OTP container element from the HTML
-//         const resendOtpContainer = document.getElementById("resendOtpContainer");
-
-//         const countdownTimer = setInterval(() => {// Function to update the timer display every second
-//             if (timeLeft <= 0) {
-//                 clearInterval(countdownTimer);
-//                 timerElement.textContent = "OTP Expired";
-//                 document.querySelector("button").disabled = true;// disable the submit button after OTP expiry
-//                 resendOtpContainer.style.display = "block";// Show the Resend OTP link when OTP is expired
-//             } else {
-//                 let minutes = Math.floor(timeLeft / 60);
-//                 let seconds = timeLeft % 60;
-//                 seconds = seconds < 10 ? "0" + seconds : seconds;
-//                 timerElement.textContent =`${minutes}:${seconds}`;
-//                 timeLeft--;
-//             }
-//         }, 1000);
-
-//         document.addEventListener('DOMContentLoaded', function() {
-//        const errorMessage = document.getElementById('error-message');
-       
-//        if (errorMessage) {
-//            setTimeout(() => {
-//                errorMessage.style.display = 'none';
-//            }, 5000);
-//        }
-//    });
-const expiresAt = parseInt("<%= expiresAt %>");
-    const currentTime = Date.now();
-    let timeLeft = Math.floor((expiresAt - currentTime) / 1000); // Remaining seconds
-
-    const timerElement = document.getElementById("timer");
-    const resendOtpContainer = document.getElementById("resendOtpContainer");
-
-    const countdownTimer = setInterval(() => {
-        if (timeLeft <= 0) {
-            clearInterval(countdownTimer);
-            timerElement.textContent = "OTP Expired";
-            document.querySelector("button").disabled = true; // Disable the submit button after OTP expiry
-            resendOtpContainer.style.display = "block"; // Show the Resend OTP link when OTP is expired
-        } else {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            timerElement.textContent = `${minutes}:${seconds}`;
-            timeLeft--;
-        }
-    }, 1000);
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const errorMessage = document.getElementById('error-message');
-        if (errorMessage) {
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
-        }
-    });
-    </script>
 </body>
 
 </html>

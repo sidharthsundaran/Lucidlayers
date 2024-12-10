@@ -1,0 +1,132 @@
+{
+    "faqs": [
+        {
+            "question": "What is psychedelic clothing?",
+            "answer": "Psychedelic clothing features vibrant, trippy, and often colorful designs inspired by the art and culture of the psychedelic movement. These designs often include surreal patterns, tie-dye, and bold prints."
+        },
+        {
+            "question": "What sizes do you offer?",
+            "answer": "Our clothing ranges from XS to XXL. Please check our size chart on each product page to find your perfect fit."
+        },
+        {
+            "question": "Do you ship internationally?",
+            "answer": "Yes, we offer international shipping to most countries. Shipping costs and delivery times depend on your location."
+        },
+        {
+            "question": "How should I care for my psychedelic clothing?",
+            "answer": "We recommend hand washing or using a gentle machine cycle with cold water. Avoid harsh detergents and air dry to maintain the vibrancy of the designs."
+        },
+        {
+            "question": "Are your products eco-friendly?",
+            "answer": "Yes, we prioritize sustainability by using eco-friendly materials and dyes wherever possible."
+        },
+        {
+            "question": "Can I return or exchange an item?",
+            "answer": "Yes, returns or exchanges are accepted within 30 days of purchase, provided the item is in its original condition. Check our return policy for more details."
+        },
+        {
+            "question": "What payment methods do you accept?",
+            "answer": "We accept credit/debit cards, PayPal, and other major payment methods. For a full list, see our payment options page."
+        },
+        {
+            "question": "Do you offer custom designs?",
+            "answer": "Yes, we can create custom psychedelic clothing for bulk orders or special events. Contact us for more details!"
+        },
+        {
+            "question": "What materials are used in your clothing?",
+            "answer": "Our clothing is made with high-quality materials like organic cotton, bamboo, and recycled polyester, ensuring comfort and durability."
+        },
+        {
+            "question": "What sizes are available for this product?",
+            "answer": "You can select from the available sizes displayed under the 'Size Options.' Sizes with no stock will be disabled."
+        },
+        {
+            "question": "How do I check the price of a specific size?",
+            "answer": "Click on a size in the 'Size Options' section to view its price and stock details."
+        },
+        {
+            "question": "Why is the price crossed out?",
+            "answer": "The original price is crossed out when there's a discount or offer price available. The discounted price is displayed in bold."
+        },
+        {
+            "question": "How can I view the product images in detail?",
+            "answer": "Click on any image in the product gallery to view it in a larger size. You can also zoom in by hovering over the image."
+        },
+        {
+            "question": "Why are there multiple images of the same product?",
+            "answer": "Each image shows the product from different angles or with different styling to help you make an informed decision."
+        },
+        {
+            "question": "What does 'Only X left in stock' mean?",
+            "answer": "This message indicates that the stock for a specific size or variant is running low. Act quickly to ensure you don’t miss out."
+        },
+        {
+            "question": "Can I purchase out-of-stock items?",
+            "answer": "No, sizes with no stock will be disabled, and you cannot add them to the cart."
+        },
+        {
+            "question": "How do I add a product to the cart?",
+            "answer": "Select a size, choose the quantity, and click on the 'Add to Cart' button."
+        },
+        {
+            "question": "Why can’t I add the product to the cart?",
+            "answer": "Ensure you’ve selected an available size and a valid quantity before attempting to add the product to your cart."
+        },
+        {
+            "question": "How do I increase or decrease the quantity in the cart?",
+            "answer": "Use the '+' or '-' buttons next to the quantity box to adjust the number of items before adding to the cart."
+        },
+        {
+            "question": "How do I add a product to my wishlist?",
+            "answer": "Click on the heart icon next to the product. The icon will turn solid if the product is added successfully."
+        },
+        {
+            "question": "How can I remove an item from my wishlist?",
+            "answer": "Click the heart icon again. The icon will turn back to its outline state."
+        },
+        {
+            "question": "Why is my wishlist empty?",
+            "answer": "Ensure you’re logged into your account and have added items to your wishlist."
+        },
+        {
+            "question": "What are related products?",
+            "answer": "These are items similar to the product you're viewing, based on category, features, or popularity."
+        },
+        {
+            "question": "Why are no related products displayed?",
+            "answer": "If no related items are found, a message will be displayed with an option to explore the shop."
+        },
+        {
+            "question": "Can I add related products to my wishlist directly?",
+            "answer": "Yes, click on the heart icon for any related product to add it to your wishlist."
+        },
+        {
+            "question": "How do I use the chat feature?",
+            "answer": "Type your message in the input box labeled 'Chat with Gemini AI' and click the 'Send' button."
+        },
+        {
+            "question": "What can I ask the AI?",
+            "answer": "You can inquire about product details, size availability, or even get styling suggestions for the product."
+        },
+        {
+            "question": "Why is the chat not responding?",
+            "answer": "Ensure your internet connection is stable. If the issue persists, refresh the page or try again later."
+        },
+        {
+            "question": "Why are some sizes grayed out?",
+            "answer": "Sizes that are out of stock will appear disabled and cannot be selected."
+        },
+        {
+            "question": "Why is the zoom-in icon not working?",
+            "answer": "Check if the JavaScript for the zoom functionality is properly loaded. Refresh the page and try again."
+        },
+        {
+            "question": "Can I view the product prices in other currencies?",
+            "answer": "Currently, prices are displayed in INR (₹). we will add that feature in near future"
+        },
+        {
+            "question": "How do I return to the shop page?",
+            "answer": "Use the 'Explore More Products' button at the bottom of the 'Related Products' section."
+        }
+    ]
+}

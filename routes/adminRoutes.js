@@ -8,7 +8,8 @@ const {storage,
 const {renderDashboard,renderUsers,renderProduct,renderAddProduct,addProduct,renderCategories,addCategory,deleteCategory,renderEditCategories,editCategory,renderEditProduct,editProduct,renderViewProduct,blockUSer, unblockUser,archiveProduct,unarchiveProduct,renderAdminOrders,
     renderadminOrderdetails,changeOrderStatus,
     renderaddOffer,renderOffersList,newOffer,listOffers,unlistOffers,deleteOffers,renderAddCoupon,
-    createCoupon}=require('../controllers/adminController')
+    createCoupon,renderadminOrderitemdetails,changeReturnStatus,renderSalesReport,filterReport,downloadPdf,downloadExcel,
+    adminSalesData,getBestSellingItems}=require('../controllers/adminController')
 
 
 router.route('/dashboard').get(renderDashboard)
@@ -30,6 +31,7 @@ router.route('/products/unarchive-products/:id').get(unarchiveProduct)
 
 router.route('/order-list').get(renderAdminOrders)
 router.route('/order-details').get(renderadminOrderdetails).post(changeOrderStatus)
+router.route('/order/orderItemDetail/:id').get(renderadminOrderitemdetails).post(changeReturnStatus)
 
 router.route('/new-Offer').get(renderaddOffer).post(newOffer)
 router.route('/offers').get(renderOffersList)
@@ -39,5 +41,14 @@ router.route('/offers/delete/:id').delete(deleteOffers)
 
 
 router.route('/create-coupon').get(renderAddCoupon).post(createCoupon)
+
+router.route('/sales').get(renderSalesReport)
+router.route('/generate-report').post(filterReport)
+router.route('/download-pdf').post(downloadPdf)
+router.route('/download-excel').post(downloadExcel)
+
+router.route('/sales-data').get(adminSalesData)
+router.route('/best-selling').get(getBestSellingItems);
+
 
 module.exports= router

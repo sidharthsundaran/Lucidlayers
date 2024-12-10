@@ -10,7 +10,7 @@ const {renderHome,logout,renderShop,renderProductDetails,renderUserDetails,
 
     renderEditAddress,editAddress,renderUserdashboard,addItemToCart,renderCart,
 
-    UpdateCartQuantity,removeCartItem,rendercheckOut,
+    removeCartItem,rendercheckOut,
 
     renderOrderSuccess,createOrder,renderOrders,renderOrderdetails,rendercancelitem,
 
@@ -18,11 +18,12 @@ const {renderHome,logout,renderShop,renderProductDetails,renderUserDetails,
 
     removeFromWishlist,addtoWishlist,renderWishlist,verifyPaymentAndCreateOrder,showCoupons,applyCoupon,
     
-    removeCoupon}=require('../controllers/userControllers')
+    removeCoupon,renderWallet,renderReturn,returnRequest,createPendingOrder,retryPayment,
+    downloadInvoice,getReferal,Chatbot}=require('../controllers/userControllers')
 
 
 
-
+router.route('/chat').post(Chatbot)
 
 router.route('/home').get(renderHome)
 router.route('/logout').get(logout)
@@ -39,7 +40,8 @@ router.route('/account/add-address').get(renderAddAddress).post(newAddress)
 router.route('/account/delete-address/:id').get(deleteAddress)
 router.route('/account/edit-address/:id').get(renderEditAddress).post(editAddress)
 router.route('/account/orders').get(renderOrders)
-
+router.route('/download-invoice/:id').get(downloadInvoice)
+router.route('/generate-referral').post(getReferal)
 //cart section
 router.route('/add-to-cart/:id').post(addItemToCart)
 router.route('/cart').get(renderCart).post(proceedtoCheckout)
@@ -64,5 +66,13 @@ router.route('/account/cancel-order').get(renderCancelConfirm).post(cancelOrder)
 router.route('/coupons').get(showCoupons)
 router.route('/checkout-order/apply-coupon').post(applyCoupon)
 router.route('/checkout-order/remove-coupon').post(removeCoupon)
+router.route('/account/orders/confirm-return_product').get(renderReturn).post(returnRequest)
+router.route('/create-pending-order').post(createPendingOrder)
+router.route('/retry-payment').post(retryPayment)
+
+
+
+//wallet section
+router.route('/wallet').get(renderWallet)
 
 module.exports=router

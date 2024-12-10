@@ -35,6 +35,176 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <style>
+        .unavailable {
+    color: gray; /* Change the color to indicate unavailability */
+    text-decoration: line-through; /* Optional: strike-through effect */
+}
+            .order-summary-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .order-summary {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .order-summary__title {
+        background-color: #343a40;
+        color: white;
+        padding: 15px 20px;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .order-summary__content {
+        padding: 20px;
+    }
+
+    .order-summary__info > div {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .order-summary__header {
+        font-weight: bold;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    .order-summary__items {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .order-summary__item {
+        padding: 5px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .order-summary__total {
+        font-weight: bold;
+        font-size: 1.2rem;
+        border-top: 2px solid #dee2e6;
+        padding-top: 10px;
+    }
+
+    .order-summary__coupon {
+        margin-top: 20px;
+    }
+
+    .order-summary__applied-coupon {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .order-summary__applied-coupon input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .order-summary__remove-coupon {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .order-summary__view-coupon {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .order-summary__payment {
+        margin-top: 20px;
+    }
+
+    .order-summary__payment-title {
+        margin-bottom: 10px;
+    }
+
+    .order-summary__payment-option {
+        margin-bottom: 10px;
+    }
+
+    .order-summary__payment-option input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    .order-summary__terms {
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+
+    .order-summary__terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 10px;
+    }
+
+    .order-summary__terms-checkbox input {
+        margin-right: 10px;
+        margin-top: 5px;
+        height: 15px;
+    }
+
+    .required {
+        color: #dc3545;
+    }
+
+    .order-summary__place-order {
+        margin-top: 20px;
+        padding: 0 20px 20px;
+    }
+
+    .order-summary__place-order button {
+        width: 100%;
+        padding: 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .order-summary__place-order button:hover {
+        background-color: #218838;
+    }
+
+    @media (max-width: 768px) {
+        .order-summary-container {
+            padding: 10px;
+        }
+
+        .order-summary__title {
+            font-size: 1.2rem;
+        }
+
+        .order-summary__content {
+            padding: 15px;
+        }
+
+        .order-summary__total {
+            font-size: 1.1rem;
+        }
+    }
+
+
         #toast-container {
     position: fixed;
     top: 20px;
@@ -87,6 +257,7 @@
     font-size: 14px; /* Font size */
     cursor: pointer; /* Pointer cursor */
     transition: background-color 0.3s; /* Smooth background color transition */
+    width: 100%;
 }
 
 .coupon-btn:hover {
@@ -189,6 +360,44 @@ input[type="radio"] {
 .apply-button:hover {
     background-color: #218838; /* Darker green */
 }
+
+
+        .checkbox-label {
+            position: relative;
+            padding-left: 30px; /* Space for the custom checkbox */
+            cursor: pointer;
+            font-size: 16px; /* Adjust font size as needed */
+        }
+
+        .checkbox-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px; /* Width of the custom checkbox */
+            height: 16px; /* Height of the custom checkbox */
+            border: 2px solid #000; /* Border color */
+            background-color: white; /* Background color */
+            border-radius: 3px; /* Rounded corners */
+        }
+
+        .custom-checkbox:checked + .checkbox-label::before {
+            background-color: green; /* Background color when checked */
+            border-color: green; /* Border color when checked */
+        }
+
+        .custom-checkbox:checked + .checkbox-label::after {
+            content: '';
+            position: absolute;
+            left: 4px; /* Position of the checkmark */
+            top: 8px; /* Position of the checkmark */
+            width: 4px; /* Width of the checkmark */
+            height: 8px; /* Height of the checkmark */
+            border: solid white; /* Checkmark color */
+            border-width: 0 2px 2px 0; /* Checkmark shape */
+            transform: rotate(45deg); /* Rotate to form a checkmark */
+        }
     </style>
 </head>
 
@@ -231,9 +440,9 @@ input[type="radio"] {
                                 <a href="wishlist.html"><i class="fa fa-heart-o"></i></a>
                             </div>
                             <div class="same-style cart-wrap">
-                                <a href="#" class="cart-active">
+                                <a href="/user/cart" >
                                     <i class="dlicon shopping_bag-20"></i>
-                                    <span class="count-style">02</span>
+                                    <!-- <span class="count-style">02</span> -->
                                 </a>
                             </div>
                             <div class="same-style header-search">
@@ -265,9 +474,9 @@ input[type="radio"] {
                         <div class="mobile-header-right-wrap">
                             <div class="header-right-wrap header-right-flex">
                                 <div class="same-style cart-wrap">
-                                    <a href="#" class="cart-active">
+                                    <a href="/user/cart" >
                                         <i class="dlicon shopping_bag-20"></i>
-                                        <span class="count-style">02</span>
+                                        <!-- <span class="count-style">02</span> -->
                                     </a>
                                 </div>
                                 <div class="same-style header-off-canvas">
@@ -293,47 +502,7 @@ input[type="radio"] {
             </div>
         </div>
         <!-- mini cart start -->
-        <div class="sidebar-cart-active">
-            <div class="sidebar-cart-all">
-                <a class="cart-close" href="#"><i class="dlicon ui-1_simple-remove"></i></a>
-                <div class="cart-content">
-                    <h3>Shopping Cart</h3>
-                    <ul>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-1.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Bejewelled velvet sandals</a></h4>
-                                <span> 1 × $49.00	</span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                        <li class="single-product-cart">
-                            <div class="cart-img">
-                                <a href="#"><img src="/user/assets/images/cart/cart-2.jpg" alt=""></a>
-                            </div>
-                            <div class="cart-title">
-                                <h4><a href="#">Contrast faux fur jacket</a></h4>
-                                <span> 1 × $49.00	</span>
-                            </div>
-                            <div class="cart-delete">
-                                <a href="#">×</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="cart-total">
-                        <h4>Subtotal: <span><%= cart.totalQuantity %></span></h4>
-                    </div>
-                    <div class="cart-checkout-btn">
-                        <a class="btn-hover cart-btn-style" href="cart.html">view cart</a>
-                        <a class="no-mrg btn-hover cart-btn-style" href="checkout.html">checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
         <!-- aside start -->
         <div class="header-aside-active">
             <div class="header-aside-wrap">
@@ -659,77 +828,79 @@ input[type="radio"] {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-5">
-                            <div class="your-order-area">
-                                <h3>Your order</h3>
-                                <div class="your-order-wrap gray-bg-4">
-                                    <div class="your-order-info-wrap">
-                                        <div class="your-order-info">
-                                            <ul>
-                                                <li>Product <span>Total</span></li>
-                                            </ul>
+                        <div class="order-summary-container">
+                            <div class="order-summary">
+                                <h2 class="order-summary__title">Your Order</h2>
+                                <div class="order-summary__content">
+                                    <div class="order-summary__info">
+                                        <div class="order-summary__header">
+                                            <span>Product</span>
+                                            <span>Total</span>
                                         </div>
-                                        <div class="your-order-middle">
-                                            <ul>
-                                                <% if (cart && cart.cartItems.length > 0) { %>
-                                                    <% cart.cartItems.forEach(item => { %>
-                                                        <li><%= item.product.name %> X <%= item.quantity %> <span>₹<%= item.price %> </span></li>
-                                                    <% })} %>
-                                            </ul>
+                                        <div class="order-summary__items">
+                                            <% if (cart && cart.cartItems.length > 0) { %>
+                                                <% cart.cartItems.forEach(item => { %>
+                                                    <div class="order-summary__item">
+                                                        <span><%= item.product.name %> X <%= item.quantity %></span>
+                                                        <span>₹<%= item.price %></span>
+                                                    </div>
+                                                <% })} %>
                                         </div>
-                                        <div class="your-order-info order-subtotal">
-                                            <ul>
-                                                <li>Subtotal <span><%= cart.totalQuantity %> </span></li>
-                                            </ul>
+                                        <div class="order-summary__subtotal">
+                                            <span>Subtotal</span>
+                                            <span><%= cart.totalQuantity %></span>
                                         </div>
-                                        <div class="your-order-info order-subtotal">
-                                            <ul>
-                                                <li>Discount <span>₹<%= cart.discount %> </span></li>
-                                            </ul>
+                                        <div class="order-summary__discount">
+                                            <span>Discount</span>
+                                            <span>₹<%= cart.discount %></span>
                                         </div>
-                                        <div class="your-order-info order-subtotal">
-                                            <ul>
-                                                <li>Delivery Charge <span>₹0</span></li>
-                                            </ul>
+                                        <div class="order-summary__delivery">
+                                            <span>Delivery Charge</span>
+                                            <span>₹0</span>
                                         </div>
-                                        <div class="your-order-info order-total">
-                                            <ul>
-                                                <li>Total <span>₹<%= cart.totalPrice %> </span></li>
-                                            </ul>
+                                        <div class="order-summary__total">
+                                            <span>Total</span>
+                                            <span>₹<%= cart.totalPrice %></span>
                                         </div>
-                                        <div class="cart-shipping-update-wrapper">
-                                            <div class="discount-code">
-                                                <% if (cart.appliedCoupon) { %> 
-                                                    <input type="text" name="name" placeholder="<%= cart.appliedCoupon %>" disabled>
-                                                    <button class="remove-coupon" type="button" id="removeCouponBtn">✖</button>
-                                                <% } %>
-                                                <button class="coupon-btn" type="button">View Coupon</button>
+                                    </div>
+                                    <div class="order-summary__coupon">
+                                        <% if (cart.appliedCoupon) { %> 
+                                            <div class="order-summary__applied-coupon">
+                                                <input type="text" name="coupon" value="<%= cart.appliedCoupon %>" disabled>
+                                                <button class="order-summary__remove-coupon" type="button" id="removeCouponBtn" aria-label="Remove coupon">✖</button>
                                             </div>
+                                        <% } %>
+                                        <button class="coupon-btn" type="button">View Coupon</button>
+                                    </div>
+                                    <div class="order-summary__payment">
+                                        <h3 class="order-summary__payment-title">Select Payment Method:</h3>
+                                        <div class="order-summary__payment-option">
+                                            <input type="radio" id="cod" name="paymentMethod" value="Pay On Delivery" checked>
+                                            <label for="cod">Cash on Delivery</label>
+                                            <span id="codUnavailableMessage" style="color: red; display: none;">(Unavailable)</span>
+                                        </div>
+                                        <div class="order-summary__payment-option">
+                                            <input type="radio" id="razorpay" name="paymentMethod" value="Razorpay">
+                                            <label for="razorpay">Online Payment (Razorpay)</label>
+                                        </div>
+                                        <div class="order-summary__payment-option">
+                                            <input type="radio" id="wallet" name="paymentMethod" value="Wallet">
+                                            <label for="razorpay">Pay from Wallet</label>
+                                        </div>
+                                        <div id="codMessage" style="color: red; display: none;">
+                                            <strong>Note:</strong> Cash on Delivery is not available for orders below ₹1000.
                                         </div>
                                     </div>
-                                    <div class="payment-method">
-                                        <h4>Select Payment Method:</h4>
-                                        <div>
-                                            <input type="radio" name="paymentMethod" value="Pay On Delivery" style="height: 15px;width: 15px;" checked>
-                                            <label for="cod"><h5>Cash on Delivery</h5></label>
-                                        </div>
-                                        <div>
-                                            <input type="radio" name="paymentMethod" value="Razorpay" style="height: 15px;width: 15px;">
-                                            <label for="razorpay"><h5>Online Payment (Razorpay)</h5></label>
-                                        </div>
-                                    </div>
-                                    <div class="condition-wrap">
-                                        <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a></p>
-                                        <div class="condition-form mb-25">
-                                            <input type="checkbox" name="termsandconditons">
-                                            <span>I have read and agree to the website <a href="#">terms and conditions</a><span class="star">*</span></span>
+                                    <div class="order-summary__terms">
+                                        <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
+                                        <div class="order-summary__terms-checkbox">
+                                            <input type="checkbox" id="termsAndConditions" class="custom-checkbox" name="termsAndConditions" required style="height: 16px; width: 6px;">
+                                            <label for="termsAndConditions">I have read and agree to the website <a href="#">terms and conditions</a><span class="required">*</span></label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="Place-order mt-30">
-                                    <button type="button" onclick="placeOrder()" style="background-color: black; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;">
-                                        Place Order
-                                    </button>
+                                <div class="order-summary__place-order">
+                                    <button type="button" onclick="placeOrder()">Place Order</button>
                                 </div>
                             </div>
                         </div>
@@ -1155,6 +1326,28 @@ input[type="radio"] {
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
+       function updatePaymentOptions() {
+    const totalPrice = <%= cart.totalPrice %>; 
+    const codOption = document.getElementById('cod');
+    const codMessage = document.getElementById('codMessage');
+    const codLabel = document.querySelector('label[for="cod"]'); // Get the label for the COD option
+    const codUnavailableMessage = document.getElementById('codUnavailableMessage');
+
+    if (totalPrice > 1000) {
+        codOption.disabled = true; 
+        codMessage.style.display = 'block'; // Show the message
+        codLabel.classList.add('unavailable');
+        codUnavailableMessage.style.display = 'none'; // Hide the unavailable message
+
+        event.preventDefault() // Remove unavailable class if it exists
+    } else {
+        codOption.disabled = false; // Enable the COD option
+        codMessage.style.display = 'none'; // Hide the message
+
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updatePaymentOptions);
 function showToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -1314,19 +1507,21 @@ document.getElementById('applyCouponBtn').addEventListener('click', async functi
         });
         return;
     }
+    
+  
 
-    const termsAndConditions = document.querySelector('input[name="termsandconditons"]:checked');
-    if (!termsAndConditions) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Please agree to our terms and conditions',
-            toast: true,
-            position: 'top',
-            timer: 3000,
-            showConfirmButton: false,
-        });
-        return;
-    }
+    // const termsAndConditions = document.querySelector('input[name="termsandconditons"]:checked');
+    // if (!termsAndConditions) {
+    //     Swal.fire({
+    //         icon: 'warning',
+    //         title: 'Please agree to our terms and conditions',
+    //         toast: true,
+    //         position: 'top',
+    //         timer: 3000,
+    //         showConfirmButton: false,
+    //     });
+    //     return;
+    // }
 
     const orderData = {
         addressId: addressId.value,
@@ -1342,74 +1537,97 @@ document.getElementById('applyCouponBtn').addEventListener('click', async functi
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         
         if (data.success) {
-            // Check if Razorpay order ID is present
+            
             if (data.razorpayOrderId) {
                 const options = {
-                    key: data.key, // Your Razorpay key
-                    amount: data.amount, // Amount in paise
-                    currency: data.currency,
-                    name: "LucidLayers",
-                    description: "Order Description",
-                    order_id: data.razorpayOrderId, // Razorpay order ID
-                    handler: function (response) {
-                        // Ensure the signature is available in the response
-                        console.log("Payment Response:", response);
-                        if (response.razorpay_signature) {
-                            // Proceed with verification
-                            fetch('/user/verify-payment', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    addressId: orderData.addressId,
-                                    order_id: data.razorpayOrderId,
-                                    payment_id: response.razorpay_payment_id,
-                                    signature: response.razorpay_signature // This should be present
-                                })
-                            })
-                            .then(res => res.json())
-                            .then(result => {
-                                if (result.success) {
-                                    // Redirect to confirmation page
-                                    window.location.href = `/user/order/confirmation/${result.orderId}`; 
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Payment verification failed.',
-                                        text: result.message || 'Please try again.',
-                                        toast: true,
-                                        position: 'top',
-                                        timer: 3000,
-                                        showConfirmButton: false,
-                                    });
-                                }
-                            });
-                        } else {
-                            console.error("Signature is undefined.");
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Payment verification failed.',
-                                text: 'Signature is missing.',
-                                toast: true,
-                                position: 'top',
-                                timer: 3000,
-                                showConfirmButton: false,
-                            });
-                        }
-                    },
-                    prefill: {
-                        name: "Customer Name",
-                        email: "customer@example.com",
-                        contact: "7012872516"
-                    },
-                    theme: {
-                        color: "black"
-                    }
-                };
+    key: data.key,
+    amount: data.amount,
+    currency: data.currency,
+    name: "LucidLayers",
+    description: "Order Description",
+    order_id: data.razorpayOrderId,
+    handler: function (response) {
+        // Payment successful
+        fetch('/user/verify-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                addressId: orderData.addressId,
+                order_id: data.razorpayOrderId,
+                payment_id: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+            
+            })
+        })
+        .then(res => res.json())
+        .then(result => {
+            if (result.success) {
+                window.location.href = `/user/order/confirmation/${result.orderId}`;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Payment verification failed.',
+                    text: result.message || 'Please try again.',
+                    toast: true,
+                    position: 'top',
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+            }
+        });
+    },
+    modal: {
+        ondismiss: function () {
+             fetch('/user/create-pending-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    addressId: orderData.addressId,
+                    order_id: data.razorpayOrderId
+                }),
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Order created with status pending.',
+                        text: 'Please complete your payment to confirm the order.',
+                        toast: true,
+                        position: 'top',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                    window.location.href = `/user/order/confirmation/${result.orderId}`;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed to create order.',
+                        text: 'Please try again.',
+                        toast: true,
+                        position: 'top',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        },
+    },
+    prefill: {
+        name: "Customer Name",
+        email: "customer@example.com",
+        contact: "7012872516"
+    },
+    theme: {
+        color: "black"
+    }
+};
 
                 const rzp1 = new Razorpay(options);
                 rzp1.open();
