@@ -312,9 +312,9 @@
                           <div class="product-wrap mb-60">
                             <div class="product-img default-overlay mb-25">
                               <a href="/user/product-details/<%= product._id %>">
-                                <img class="default-img" src="/Uploads/<%= product.images[0] %>" alt="<%= product.name %>">
+                                <img class="default-img" src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>">
                                 <% if (product.images[1]) { %>
-                                  <img class="hover-img" src="/Uploads/<%= product.images[1] %>" alt="<%= product.name %>">
+                                  <img class="hover-img" src="/uploads/<%= product.images[1] %>" alt="<%= product.name %>">
                                 <% } %>
                                 <% if (product.hasOffer) { %>
                                   <span class="badge-black badge-left-20 badge-top-20 badge-width-height-2 badge-border-radius-100">sale!</span>
