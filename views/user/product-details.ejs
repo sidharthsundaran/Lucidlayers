@@ -488,11 +488,11 @@
                                         <% for(let i=0; i<data.images.length;i++){ %>
                                     <div class="easyzoom-style">
                                         <div class="easyzoom easyzoom--overlay">
-                                            <a href="/Uploads/<%= data.images[i] %>">
-                                                <img src="/Uploads/<%= data.images[i] %>" alt="">
+                                            <a href="/uploads/<%= data.images[i] %>">
+                                                <img src="/uploads/<%= data.images[i] %>" alt="">
                                             </a>
                                         </div>
-                                        <a class="easyzoom-pop-up img-popup" href="/Uploads/<%= data.images[i] %>"><i class="dlicon ui-1_zoom-in "></i></a>
+                                        <a class="easyzoom-pop-up img-popup" href="/uploads/<%= data.images[i] %>"><i class="dlicon ui-1_zoom-in "></i></a>
                                     </div>
                                     <% } %>
                                     <% } %>
@@ -502,7 +502,7 @@
                                     <% if (data.images.length>0) { %>
                                         <% for(let i=0; i<data.images.length;i++){ %>
                                     <div class="product-dec-small active">
-                                        <img src="/Uploads/<%= data.images[i] %>" alt="">
+                                        <img src="/uploads/<%= data.images[i] %>" alt="">
                                     </div>
                                  <% }} %>
                                 </div>
@@ -802,9 +802,9 @@
                                 <div class="product-wrap">
                                     <div class="product-img default-overlay mb-25">
                                         <a href="/user/product-details/<%= product._id %>">
-                                            <img class="default-img" src="/Uploads/<%= product.images[0] %>" alt="<%= product.name %>">
+                                            <img class="default-img" src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>">
                                             <% if (product.images[1]) { %>
-                                                <img class="hover-img" src="/Uploads/<%= product.images[1] %>" alt="<%= product.name %>">
+                                                <img class="hover-img" src="/uploads/<%= product.images[1] %>" alt="<%= product.name %>">
                                             <% } %>
                                         </a>
                                         <div class="product-action product-action-position-1">
