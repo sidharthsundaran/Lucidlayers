@@ -662,7 +662,7 @@ const newOffer = async (req, res) => {
 const renderOffersList = async(req,res)=>{
   try {
     const offers = await Offers.find();
-    res.render('offersList', { offers });
+    res.render('offerslist', { offers });
   } catch (error) {
     res.status(500).send('Error fetching offers');
   }
@@ -949,7 +949,7 @@ const renderSalesReport = async (req, res) => {
 
       const netSales = totalSales - totalDiscount;
 
-      res.render('salesReport', { 
+      res.render('salesreport', { 
           orders, 
           totalSales, 
           totalOrders, 
