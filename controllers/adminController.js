@@ -142,7 +142,7 @@ const renderUsers=async(req,res)=>{
 
 const renderProduct = async (req,res)=>{
     const productData= await Products.find()
-    res.render('productList',{data:productData})
+    res.render('productlist',{data:productData})
 }
 
 
