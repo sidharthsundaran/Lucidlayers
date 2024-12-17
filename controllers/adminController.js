@@ -118,7 +118,7 @@ const renderDashboard = async (req, res) => {
   ]);
       
     
-      res.render('dashboard', {
+      res.render('Dashboard', {
           totalRevenue: totalRevenue[0]?.total || 0,
           totalOrders: totalOrders,
           totalProducts: totalProducts,
@@ -175,7 +175,7 @@ const renderAddProduct = async (req, res) => {
 
 const renderCategories =async(req,res)=>{
     const categorydata = await Categories.find()
-    return  res.render('categories',{cat:categorydata});   
+    return  res.render('Categories',{cat:categorydata});   
 }
 
 const renderEditCategories = async (req,res)=>{
@@ -662,7 +662,7 @@ const newOffer = async (req, res) => {
 const renderOffersList = async(req,res)=>{
   try {
     const offers = await Offers.find();
-    res.render('offerslist', { offers });
+    res.render('OffersList', { offers });
   } catch (error) {
     res.status(500).send('Error fetching offers');
   }
@@ -949,7 +949,7 @@ const renderSalesReport = async (req, res) => {
 
       const netSales = totalSales - totalDiscount;
 
-      res.render('salesreport', { 
+      res.render('SalesReportgit', { 
           orders, 
           totalSales, 
           totalOrders, 
