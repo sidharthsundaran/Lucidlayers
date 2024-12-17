@@ -175,7 +175,7 @@ const renderAddProduct = async (req, res) => {
 
 const renderCategories =async(req,res)=>{
     const categorydata = await Categories.find()
-    return  res.render('categories',{cat:categorydata});   
+    return  res.render('Categories',{cat:categorydata});   
 }
 
 const renderEditCategories = async (req,res)=>{
