@@ -350,10 +350,10 @@ const renderProductDetails = async (req, res) => {
 
         const Related = await products.find({
             category: product.category,
-            active: true,
             _id: { $ne: id }
         }).limit(10);
-
+        console.log(Related);
+        
         let lowestOfferPrice = product.sizeVariations && product.sizeVariations.length > 0 ? product.sizeVariations[0].price : null;
 
         if (lowestOfferPrice !== null) {
@@ -529,7 +529,6 @@ const renderEditAddress = async (req,res)=> {
 
 const editAddress = async (req,res)=> {
     const id=req.params.id
-    console.log("ss");
     
     try {
         const {firstName,lastName,companyName,street,apartment,city,district,state,country,zip,phone}=req.body
@@ -637,8 +636,6 @@ const addItemToCart = async (req, res) => {
                 cart.totalQuantity += quantity;
                 cart.totalPrice += bestPrice * quantity;
                 await cart.save();
-                console.log('Cart after adding item:', cart); // Log cart after item addition
-
             } catch (error) {
                 console.log(error);
                 
@@ -662,7 +659,7 @@ const addItemToCart = async (req, res) => {
         res.status(200).json({ message: 'Item added to cart successfully', cart });
     } catch (err) {
         console.error(err);
-         res.status(500).json({ message: 'Error adding item to cart' });
+        return res.status(500).json({ message: 'Error adding item to cart' });
     }
 };;
 
@@ -1825,11 +1822,15 @@ const removeCoupon = async (req, res) => {
 const renderWallet = async(req,res)=>{
     try {
         const id= req.userId
+        console.log(id);
+        
         const wallet = await Wallet.findOne({user:id}).populate({
             path:'transactions',
             ref:'Transactions',
             options: { sort: { createdAt: -1 } } 
         })
+        console.log(wallet);
+        
         res.render('wallet',{wallet})
     } catch (error) {
         console.log(error);

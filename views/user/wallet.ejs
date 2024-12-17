@@ -404,14 +404,22 @@
                                         <div class="tab-pane fade show active" id="wallet" role="tabpanel">
                                             <div class="myaccount-content">
                                                 <h3>Wallet Overview</h3>
-                                                <div class="wallet-balance">
-                                                    <h2>Current Balance: ₹<%= wallet.balance %></h2>
-                                                </div>
+                                                <% if(wallet){ %>
+                                                    <div class="wallet-balance">
+                                                        <h2>Current Balance: ₹<%= wallet.balance %></h2>
+                                                    </div>
+
+                                                <%}else{ %>
+                                                    <div class="wallet-balance">
+                                                        <h2>Wallet Not Found</h2>
+                                                    </div>
+                                                    <% } %>
                                                 <div class="wallet-actions">
                                                     <button class="btn btn-primary" data-toggle="modal" data-target="#addFundsModal">Add Funds</button>
                                                     <button class="btn btn-secondary" data-toggle="modal" data-target="#withdrawModal">Withdraw</button>
                                                 </div>
                                                 <div class="recent-transactions">
+                                                    <% if(wallet){ %>
                                                     <h4>Recent Transactions</h4>
                                                     <table class="table">
                                                         <thead>
@@ -441,6 +449,7 @@
                                                             <% } %>
                                                         </tbody>
                                                     </table>
+                                                    <% } %>
                                                 </div>
                                             </div>
                                         </div>
