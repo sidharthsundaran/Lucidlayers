@@ -558,7 +558,7 @@ const renderAdminOrders = async (req,res)=>{
     })
     .sort({ createdAt: -1 });
     
-      res.render('orderslist',{orders})
+      res.render('ordersList',{orders})
   } catch (error) {
       console.log(error)
   }
@@ -949,7 +949,7 @@ const renderSalesReport = async (req, res) => {
 
       const netSales = totalSales - totalDiscount;
 
-      res.render('SalesReportgit', { 
+      res.render('SalesReport', { 
           orders, 
           totalSales, 
           totalOrders, 

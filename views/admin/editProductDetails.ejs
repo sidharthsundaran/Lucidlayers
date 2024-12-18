@@ -278,6 +278,8 @@
     let currentImage = null;
     let imageArray = []; // Stores new images
     let existingImages = <%- JSON.stringify(data.images) %>; // Existing images loaded from server
+    console.log(existingImages);
+    
     let removedImages = []; // Tracks existing images that are removed
 
     // Preview and add new images
