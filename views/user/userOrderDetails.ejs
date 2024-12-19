@@ -623,7 +623,7 @@ body {
                                 <% } %>
                             </div>
                         </div>
-                        <%  if (item.orderStatus !== 'delivered') { %>
+                        <%  if (order[0].orderStatus !== 'delivered') { %>
 
                         <button onclick="window.location.href='/user/download-invoice/<%= order[0]._id %>'" 
                             class="btn btn-primary" 
