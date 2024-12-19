@@ -195,17 +195,10 @@ body {
                                 <ul>
                                     <li class="position-static"><a class="active" href="/user/home">Home</a>
                                     </li>
-                                    <li><a href="#">Pages </a>
-                                    </li>
                                     <li><a href="/user/shop">Shop </a>
 
                                     </li>
-                                    <li><a href="shop-collection-1.html">Collections <i class="fa fa-angle-down"></i>
-                                        </a>
-                                    </li>
-                                    <li><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                                    </li>
-                                    <li><a href="shop-instagram.html">Instagram Shop </a></li>
+                                 
                                 </ul>
                             </nav>
                         </div>
@@ -337,18 +330,8 @@ body {
                                 <!-- mobile menu navigation start -->
                                 <nav>
                                     <ul class="mobile-menu">
-                                        <li class="menu-item-has-children"><a href="index.html">Home</a>
-                                            <ul class="dropdown">
-                                                <li class="menu-item-has-children"><a href="#">Demo Group 01</a>
-                                                    
-                                                </li>
-                                                <li class="menu-item-has-children"><a href="#">Demo Group 02</a>
-                                                    
-                                                </li>
-                                                <li class="menu-item-has-children"><a href="#">Demo Group 03</a>
-                                                    
-                                                </li>
-                                            </ul>
+                                        <li class="menu-item-has-children"><a href="/user/home">Home</a>
+                                           
                                         </li>
                                         <li class="menu-item-has-children"><a href="#">Pages</a>
                                            
@@ -473,7 +456,7 @@ body {
                             <a href="/user/account">
                                 Dashboard</a>
                             <a href="/user/account/orders" class="active"> Orders</a>
-                            <a href="/user/account/" > Download</a>
+                            <a href="/user/wallet/" > Wallet/a>
                             <a href="/user/account/address"  > address</a>
                             <a href="/user/account-details"> Account Details</a>
                             <a href="login-register.html"> Logout</a>
@@ -588,7 +571,7 @@ body {
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-                                                                <img class="thumbnail me-2" src="/Uploads/<%= item.productId.images[0] %>" alt="" class="item-image">
+                                                                <img class="thumbnail me-2" src="/uploads/<%= item.productId.images[0] %>" alt="" class="item-image">
                                                                 <span class="item-name"><%= item.productName %></span>
                                                             </div>
                                                         </td>
@@ -640,12 +623,14 @@ body {
                                 <% } %>
                             </div>
                         </div>
+                        <%  if (item.orderStatus !== 'delivered') { %>
+
                         <button onclick="window.location.href='/user/download-invoice/<%= order[0]._id %>'" 
                             class="btn btn-primary" 
                             style="background-color: white; border-color: #088178; color: #088178;">
                         Download Invoice
                         </button>
-                        
+                        <% } %>
                     </div>
                 </div>
             </div>

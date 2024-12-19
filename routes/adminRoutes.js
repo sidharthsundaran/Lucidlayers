@@ -29,7 +29,7 @@ router.route('/products/:id/remove-image').post(removeImage)
 router.route('/products/view/:id').get(renderViewProduct)
 router.route('/products/archive-products/:id').get(archiveProduct)
 router.route('/products/unarchive-products/:id').get(unarchiveProduct)
-router.route('//products/delete/:id').get(deleteproduct)
+router.route('/products/delete/:id').get(deleteproduct)
 
 router.route('/order-list').get(renderAdminOrders)
 router.route('/order-details').get(renderadminOrderdetails).post(changeOrderStatus)
