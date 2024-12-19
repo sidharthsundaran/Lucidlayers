@@ -890,11 +890,13 @@ const rendercheckOut = async(req,res)=>{
         if(cart.cartItems.length==0){
             return res.redirect('/user/shop')
         }
-    
+        const wallet = await Wallet.find({user:userId})
+        console.log(wallet);
+        
         const coupon= await Coupons.find({isActive:true})        
         const address =  await Address.find({userId:userId})
 
-        res.render('checkout',{cart,address,coupon})
+        res.render('checkout',{cart,address,coupon,wallet})
     } catch (error) {
         console.log(error)
     }
@@ -1014,9 +1016,12 @@ const createOrder = async (req, res) => {
             
             const wallet= await Wallet.findOne({user:userId})
             if(!wallet){
-                console.log("wallet not found");
-                return res.status(400).json({message:'Wallet Not found for this user'})
-                
+                const wallet= new Wallet({
+                    user:userId
+                })
+                await wallet.save()
+                return res.status(400).json({message:'Wallet Not found for this user! try again'})
+
             }
             if(wallet.balance<cart.totalPrice){
                 
