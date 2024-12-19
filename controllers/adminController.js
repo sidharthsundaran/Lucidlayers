@@ -306,13 +306,12 @@ const editCategory = async (req, res) => {
     }
   };
 
-  const editProduct = async (req, res) => {
+  const 
+  editProduct = async (req, res) => {
     const id = req.params.id;
 
     try {
         const { category, title, sleeve, material, color, description, sizes, prices, stocks, removedImages } = req.body;
-      console.log(sleeve);
-      
         const productData = await Products.findById(id);
         if (!productData) {
             req.flash('error', 'Product not found.');
@@ -358,6 +357,39 @@ const editCategory = async (req, res) => {
         req.flash('error', 'Something went wrong. Please try again.');
         return res.redirect(`/admin/products/edit/${id}`);
     }
+};
+
+
+const removeImage = async (req, res) => {
+  
+  console.log(req.body.json);
+  const { imageFileName } = req.body;
+  
+  const { id } = req.params; 
+  console.log(id);
+  
+  try {
+      const product = await Products.findById(id);
+      if (!product) {
+          return res.status(404).json({ success: false, message: 'Product not found.' });
+      }
+
+      if (!product.images.includes(imageFileName)) {
+          return res.status(404).json({ success: false, message: 'Image not found in product.' });
+      }
+
+      const imgPath = path.join(__dirname, "../uploads", imageFileName);
+
+      if (fs.existsSync(imgPath)) {
+          fs.unlinkSync(imgPath);
+      }
+      product.images = product.images.filter(img => img !== imageFileName);
+      await product.save();
+      return res.json({ success: true, message: 'Image removed successfully.' });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 };
 
 
@@ -1376,7 +1408,8 @@ module.exports={
    downloadPdf,
    downloadExcel,
    adminSalesData,
-   getBestSellingItems
+   getBestSellingItems,
+   removeImage
 
 
     

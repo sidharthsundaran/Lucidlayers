@@ -8,7 +8,58 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/imgs/theme/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
     <link href="/admin/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <style>
+  .crop-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.crop-modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.crop-modal-content {
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 10;
+}
+
+.crop-image {
+    max-width: 100%;
+    max-height: 70vh;
+    margin-bottom: 20px;
+}
+
+.modal-buttons button {
+    margin: 0 10px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+</style>
 </head>
 
 <body>
@@ -233,27 +284,46 @@
                                         </div>
                                     </div>
                                 </div> <!-- Card: Category End -->
-                                <div class="card mb-4">
-                                    <!-- Image Input and Preview Section -->
-                               <!-- Image Input and Preview Section -->
-                               <div class="card-body">
-                                <label class="form-label">Images</label>
-                                <input class="form-control" type="file" name="newImages" id="newImages" onchange="previewNewImages(event)" multiple>
-                                <div id="imagePreview" class="mt-3">
-                                    <!-- Existing Images -->
-                                    <% data.images.forEach((image) => { %>
-                                        <div class="image-container existing-image" data-image="<%= image %>">
-                                            <img src="/uploads/<%= image %>" class="img-thumbnail" style="width:100px; cursor:pointer;"
-                                                 onclick="openCropper('/uploads/<%= image %>', 'existing', '<%= image %>')">
-                                            <button type="button" class="btn btn-danger" onclick="removeImage('<%= image %>', 'existing')">x</button>
+                                <div class="card-body">
+                                    <label class="form-label">Images</label>
+                                    <input class="form-control" type="file" name="newImages" id="newImages" onchange="previewNewImages(event)" multiple>
+                                    <div id="imagePreview" class="mt-3 d-flex flex-wrap gap-3">
+                                        <!-- Render Existing Images Dynamically -->
+                                        <% data.images.forEach((image) => { %>
+                                            <div class="image-container" data-image="<%= image %>">
+                                                <img src="/uploads/<%= image %>" class="img-thumbnail" style="width:100px; cursor:pointer;"
+                                                     onclick="openCropper('/uploads/<%= image %>', 'existing', '<%= image %>')">
+                                                <button type="button" class="btn btn-primary btn-sm mt-1" 
+                                                        onclick="openCropper('/uploads/<%= image %>', 'existing', '<%= image %>')">Crop</button>
+                                                <button type="button" class="btn btn-danger btn-sm mt-1" 
+                                                        onclick="removeImage('<%= image %>', 'existing')">Remove</button>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                
+                                    <!-- Cropping Modal -->
+                                    <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Crop Image</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img id="cropperImage" style="max-width: 100%;"/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-primary" id="cropSaveBtn">Save</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    <% }) %>
+                                    </div>
                                 </div>
-                                <!-- Cropping Modal -->
-                                <div id="cropModal" style="display:none;">
-                                    <img id="croppingImage" src="" alt="Image to crop">
-                                    <button onclick="cropImage()">Crop</button>
-                                </div>
+                                
+                            </div>
+                            
+                            </div>
                             </div>
                             
                             </div>
@@ -273,142 +343,156 @@
             <script src="assets/js/vendor.js"></script>
             <script src="assets/js/main.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-            <script>
-                   let cropper;
-    let currentImage = null;
-    let imageArray = []; // Stores new images
-    let existingImages = <%- JSON.stringify(data.images) %>; // Existing images loaded from server
-    console.log(existingImages);
-    
-    let removedImages = []; // Tracks existing images that are removed
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+    let cropper;
+let currentImage = null;
+let imageArray = []; // Stores new images to be uploaded
+let existingImages = <%- JSON.stringify(data.images) %>; // Existing images from the server
+let removedImages = []; // Tracks removed existing images
 
-    // Preview and add new images
-    function previewNewImages(event) {
-        const files = event.target.files;
-        Array.from(files).forEach((file) => {
+function previewNewImages(event) {
+    const files = event.target.files;
+    Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imgContainer = createImageContainer(e.target.result, 'new', file);
+            imageArray.push(file); // Add file to upload queue
+            document.getElementById("imagePreview").appendChild(imgContainer);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function createImageContainer(src, type, imageFileOrName) {
+    const container = document.createElement("div");
+    container.classList.add("image-container");
+    container.setAttribute('data-image', type === 'new' ? imageFileOrName.name : imageFileOrName);
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("img-thumbnail");
+    img.style = "width:100px; cursor:pointer;";
+    img.onclick = () => openCropper(src, type, imageFileOrName);
+
+    const cropBtn = document.createElement("button");
+    cropBtn.innerText = "Crop";
+    cropBtn.classList.add("btn", "btn-primary", "btn-sm", "mt-1");
+    cropBtn.onclick = () => openCropper(src, type, imageFileOrName);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Remove";
+    removeBtn.classList.add("btn", "btn-danger", "btn-sm", "mt-1");
+    removeBtn.onclick = () => removeImage(imageFileOrName, type);
+
+    container.appendChild(img);
+    container.appendChild(cropBtn);
+    container.appendChild(removeBtn);
+    return container;
+}
+
+function openCropper(imageSrc, type, imageFileOrName) {
+    document.getElementById("cropModal").style.display = "block";
+    document.getElementById("croppingImage").src = imageSrc;
+
+    if (cropper) cropper.destroy();
+
+    cropper = new Cropper(document.getElementById("croppingImage"), {
+        aspectRatio: 1, // Adjust aspect ratio if required
+        viewMode: 1,
+        autoCropArea: 1,
+        responsive: true,
+        minCropBoxWidth: 50,
+        minCropBoxHeight: 50,
+    });
+    currentImage = { type, imageFileOrName };
+}
+
+function cropImage() {
+    cropper.getCroppedCanvas().toBlob((blob) => {
+        const croppedFile = new File([blob], `${Date.now()}.png`, { type: 'image/png' });
+
+        if (currentImage.type === 'new') {
+            const index = imageArray.indexOf(currentImage.imageFileOrName);
+            if (index >= 0) imageArray[index] = croppedFile;
+        } else if (currentImage.type === 'existing') {
+            removeImage(currentImage.imageFileOrName, 'existing', true);
+            imageArray.push(croppedFile);
+        }
+
+        const container = document.querySelector(`[data-image="${currentImage.imageFileOrName}"]`);
+        if (container) {
+            const img = container.querySelector('img');
             const reader = new FileReader();
             reader.onload = (e) => {
-                const imgContainer = createImageContainer(e.target.result, 'new', file);
-                imageArray.push(file); // Store the file for upload
-                document.getElementById("imagePreview").appendChild(imgContainer);
+                img.src = e.target.result; // Update the preview with cropped image
             };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    // Create image container for both new and existing images
-    function createImageContainer(src, type, imageFileOrName) {
-        const container = document.createElement("div");
-        container.classList.add("image-container");
-        
-        const img = document.createElement("img");
-        img.src = src;
-        img.classList.add("img-thumbnail");
-        img.style = "width:100px; cursor:pointer;";
-        img.onclick = () => openCropper(src, type, imageFileOrName);
-
-        container.appendChild(img);
-
-        // Crop button
-        const cropBtn = document.createElement("button");
-        cropBtn.innerText = "Crop";
-        cropBtn.classList.add("btn", "btn-primary");
-        cropBtn.onclick = () => openCropper(src, type, imageFileOrName);
-        container.appendChild(cropBtn);
-
-        // Remove button
-        const removeBtn = document.createElement("button");
-        removeBtn.innerText = "Remove";
-        removeBtn.classList.add("btn", "btn-danger");
-        removeBtn.onclick = () => removeImage(imageFileOrName, type);
-
-        container.appendChild(removeBtn);
-        return container;
-    }
-
-    // Open cropping modal
-    function openCropper(imageSrc, type, imageFileOrName) {
-        document.getElementById("cropModal").style.display = "block";
-        document.getElementById("croppingImage").src = imageSrc;
-        if (cropper) cropper.destroy();
-
-        cropper = new Cropper(document.getElementById("croppingImage"), { aspectRatio: 1 });
-        currentImage = { type, imageFileOrName };
-    }
-
-    // Crop and replace the image
-    function cropImage() {
-        cropper.getCroppedCanvas().toBlob((blob) => {
-            const croppedFile = new File([blob], `${Date.now()}.png`, { type: 'image/png' });
-            
-            if (currentImage.type === 'new') {
-                const index = imageArray.indexOf(currentImage.imageFileOrName);
-                if (index >= 0) imageArray[index] = croppedFile;
-            } else if (currentImage.type === 'existing') {
-                removeImage(currentImage.imageFileOrName, 'existing', true); // Remove existing image and replace it
-                imageArray.push(croppedFile);
-            }
-
-            document.getElementById("cropModal").style.display = "none";
-            cropper.destroy();
-        });
-    }
-
-    // Remove selected image
-    function removeImage(imageFileOrName, type, isCropped = false) {
-        if (type === 'existing') {
-            removedImages.push(imageFileOrName); // Track removed image from existing
-            const imgContainer = document.querySelector(`[data-image="${imageFileOrName}"]`);
-            if (imgContainer) imgContainer.remove(); // Remove preview
-            // Send an AJAX request to remove the image from the database
-            sendRemoveImageRequest(imageFileOrName);
-        } else if (type === 'new') {
-            const index = imageArray.indexOf(imageFileOrName);
-            if (index >= 0) imageArray.splice(index, 1);
+            reader.readAsDataURL(blob);
         }
+
+        closeCropper();
+    });
+}
+
+function closeCropper() {
+    document.getElementById("cropModal").style.display = "none";
+    if (cropper) cropper.destroy();
+    cropper = null;
+    currentImage = null;
+}
+
+function removeImage(imageFileOrName, type, isCropped = false) {
+    if (type === 'existing') {
+        removedImages.push(imageFileOrName);
+        sendRemoveImageRequest(imageFileOrName);
+    } else if (type === 'new') {
+        const index = imageArray.indexOf(imageFileOrName);
+        if (index >= 0) imageArray.splice(index, 1);
     }
 
-    // Function to send AJAX request to remove image from the database
-    function sendRemoveImageRequest(imageFileName) {
-        fetch(`/admin/products/remove-image`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ imageFileName }),
+    const imgContainer = document.querySelector(`[data-image="${imageFileOrName.name || imageFileOrName}"]`);
+    if (imgContainer) imgContainer.remove();
+}
+
+function sendRemoveImageRequest(imageFileName) {
+    const productId = '<%= data._id %>';
+    fetch(`/admin/products/${productId}/remove-image`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageFileName }),
+    })
+        .then((response) => {
+            if (!response.ok) throw new Error(`Error: ${response.status}`);
+            return response.json();
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Image removed successfully:', data);
-        })
-        .catch((error) => {
-            console.error('Error removing image:', error);
-        });
-    }
-            
-                function addSizeVariation() {
-                    const container = document.getElementById('size-variations-container');
-                    const newVariation = document.createElement('div');
-                    newVariation.classList.add('size-variation');
-                    newVariation.innerHTML = `
-                        <select class="form-select" name="sizes[]" required>
-                            <option value="" selected>Select Size</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                        </select>
-                        <input type="number" name="prices[]" placeholder="Price" required>
-                        <input type="number" name="stocks[]" placeholder="Stock" required>
-                        <button type="button" class="btn btn-danger" onclick="removeSizeVariation(this)">Remove</button>
-                    `;
-                    container.appendChild(newVariation);
-                }
-                
-                function removeSizeVariation(button) {
-                    button.parentElement.remove();
-                }
-            </script>
+        .then((data) => console.log('Image removed successfully:', data))
+        .catch((error) => console.error('Error removing image:', error));
+}
+
+function addSizeVariation() {
+    const container = document.getElementById('size-variations-container');
+    const newVariation = document.createElement('div');
+    newVariation.classList.add('size-variation');
+    newVariation.innerHTML = `
+        <select class="form-select" name="sizes[]" required>
+            <option value="" selected>Select Size</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+        </select>
+        <input type="number" name="prices[]" placeholder="Price" required>
+        <input type="number" name="stocks[]" placeholder="Stock" required>
+        <button type="button" class="btn btn-danger" onclick="removeSizeVariation(this)">Remove</button>
+    `;
+    container.appendChild(newVariation);
+}
+
+function removeSizeVariation(button) {
+    button.parentElement.remove();
+}
+
+</script>
         </body>
         
         </html>
