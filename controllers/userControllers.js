@@ -890,7 +890,7 @@ const rendercheckOut = async(req,res)=>{
         if(cart.cartItems.length==0){
             return res.redirect('/user/shop')
         }
-        const wallet = await Wallet.find({user:userId})
+        const wallet = await Wallet.findOne({user:userId})
         console.log(wallet);
         
         const coupon= await Coupons.find({isActive:true})        
