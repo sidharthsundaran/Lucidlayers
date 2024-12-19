@@ -929,7 +929,34 @@ const changeReturnStatus = async (req, res) => {
                 wallet.transactions.push(transaction._id);
                 await wallet.save();
             } else {
-                console.error('Wallet not found for user:', userId);
+              const nwallet= new Wallet({
+                user:userId
+            })
+            await nwallet.save()
+            nwallet.balance += refundAmount;
+                try {
+                    await nwallet.save();
+                } catch (error) {
+                    console.error('Error saving wallet:', error);
+                    return res.status(500).json({ message: "Error updating wallet balance." });
+                }
+
+                const transaction = new Transactions({
+                    user: order.user,
+                    amount: refundAmount,
+                    type: 'credit',
+                    description: `Refund for returned order item ${itemId}`,
+                });
+                  
+                try {
+                    await transaction.save();
+                } catch (error) {
+                    console.error('Error creating transaction:', error);
+                    return res.status(500).json({ message: "Error creating transaction." });
+                }
+
+                nwallet.transactions.push(transaction._id);
+                await nwallet.save();
                 return res.status(404).json({ message: "Wallet not found." });
             }
         }

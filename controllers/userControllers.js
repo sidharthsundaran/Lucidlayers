@@ -1453,7 +1453,7 @@ const renderOrders = async (req,res)=>{
     if(!order){
         return res.status(500).json({ success: false, message: "Something went worng!! Please try again", error: error.message })
     }
-    res.render('userOrderdetails',{order})
+    res.render('userOrderDetails',{order})
     } catch (error) {
         console.log(error)
     }
