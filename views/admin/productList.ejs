@@ -225,7 +225,7 @@
                                     </ul>
                                 </div>
                             
-                                <a href="#" class="btn btn-sm font-sm btn-light rounded">
+                                <a href="/admin/products/delete/<%=data[i]._id %>" class="btn btn-sm font-sm btn-light rounded">
                                     <i class="material-icons md-delete_forever"></i> Delete
                                 </a>
                             </div>
@@ -313,7 +313,7 @@
             var button = event.relatedTarget;
             var userId = button.getAttribute('data-userId');
             var confirmblock = blockModal.querySelector('#confirmblock');
-            confirmblock.href = 'products/archive-products/' + userId;
+            confirmblock.href = '/admin/products/archive-products/' + userId;
         });
 
         var unblockModal = document.getElementById('unblockModal');
@@ -321,7 +321,7 @@
             var button = event.relatedTarget;
             var userId = button.getAttribute('data-userId');
             var confirmunblock = unblockModal.querySelector('#confirmunblock');
-            confirmunblock.href = 'products/unarchive-products/' + userId;
+            confirmunblock.href = '/admin/products/unarchive-products/' + userId;
         });
     </script>
 </body>

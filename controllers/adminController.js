@@ -12,6 +12,7 @@ const Wallet = require('../models/walletModel')
 const Transactions =require('../models/transactions')
 const PDFDocument = require('pdfkit');
 const ExcelJS = require('exceljs');
+// const { default: products } = require('razorpay/dist/types/products')
 
 
 
@@ -222,7 +223,16 @@ const renderEditProduct = async (req, res) => {
       console.log(error)
     }
   }
-  
+  const deleteproduct = async(req,res)=>{
+    const id= req.params.id
+    try {
+      await Products.findByIdAndDelete({_id:id})
+      return res.redirect('/admin/products')
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   const unarchiveProduct = async (req,res)=>{
     try {
       const id=req.params.id
@@ -833,7 +843,7 @@ const renderadminOrderitemdetails = async (req, res) => {
       }
     }
 
-    res.render('adminorderitemDetail', { order, statusOptions, showSaveButton });
+    res.render('adminorderItemDetail', { order, statusOptions, showSaveButton });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({
@@ -1409,7 +1419,8 @@ module.exports={
    downloadExcel,
    adminSalesData,
    getBestSellingItems,
-   removeImage
+   removeImage,
+   deleteproduct
 
 
     

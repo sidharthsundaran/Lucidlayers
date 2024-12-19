@@ -9,7 +9,7 @@ const {renderDashboard,renderUsers,renderProduct,renderAddProduct,addProduct,ren
     renderadminOrderdetails,changeOrderStatus,
     renderaddOffer,renderOffersList,newOffer,listOffers,unlistOffers,deleteOffers,renderAddCoupon,
     createCoupon,renderadminOrderitemdetails,changeReturnStatus,renderSalesReport,filterReport,downloadPdf,downloadExcel,
-    adminSalesData,getBestSellingItems,removeImage}=require('../controllers/adminController')
+    adminSalesData,getBestSellingItems,removeImage,deleteproduct}=require('../controllers/adminController')
 
 
 router.route('/dashboard').get(renderDashboard)
@@ -29,7 +29,7 @@ router.route('/products/:id/remove-image').post(removeImage)
 router.route('/products/view/:id').get(renderViewProduct)
 router.route('/products/archive-products/:id').get(archiveProduct)
 router.route('/products/unarchive-products/:id').get(unarchiveProduct)
-
+router.route('//products/delete/:id').get(deleteproduct)
 
 router.route('/order-list').get(renderAdminOrders)
 router.route('/order-details').get(renderadminOrderdetails).post(changeOrderStatus)
