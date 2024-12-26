@@ -539,10 +539,11 @@ body {
                                     <div class="col-md-4 col-sm-6 mb-4">
                                         <address style="border: 1px solid #ddd; padding: 15px; border-radius: 5px;display: block; height: 100%;">
                                             <p><strong>Order Summary</strong></p>
-                                            <p>Item(s) Subtotal: &nbsp;&nbsp;&nbsp;&nbsp; ₹<%= order[0].totalPrice%> </p>
+                                            <p>Item(s) Subtotal: &nbsp;&nbsp;&nbsp;&nbsp; ₹<%= Math.round(order[0].totalPrice)%> </p>
                                             <p>Shipping:&nbsp;&nbsp;&nbsp;&nbsp; ₹0.00</p>
+                                            <p>Discount:&nbsp;&nbsp;&nbsp;&nbsp;₹<%= order[0].discount  %> </p>
                                             <p>Cash/Pay on Delivery fee:&nbsp;&nbsp;&nbsp;&nbsp; ₹0.00 </p>
-                                            <p><strong> Grangtotal : ₹<%= order[0].totalPrice%></strong> </p>
+                                            <p><strong> Grandtotal : ₹<%= Math.round( order[0].totalPrice)%></strong> </p>
                                         </address>
                                         
                                         

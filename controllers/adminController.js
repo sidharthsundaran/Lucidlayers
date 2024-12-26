@@ -637,14 +637,7 @@ const changeOrderStatus= async(req,res)=>{
   
   try {
     const orderUpdate= await Order.findByIdAndUpdate({_id:id},{$set:{orderStatus:status}})
-    const itemUpdatePromises = orderUpdate.items.map(itemId => {
-            return orderItem.findByIdAndUpdate(
-                itemId,
-                { $set: { orderStatus: status } }
-            );
-        })
-        await Promise.all(itemUpdatePromises);
-        return res.redirect('/admin/order-list')
+    return res.redirect('/admin/order-list')
   } catch (error) {
     console.log(error);
     
@@ -660,6 +653,20 @@ const renderaddOffer = async (req, res) => {
       res.status(500).json({ message: 'Error fetching products and categories' });
   }
 }
+const renderEditOffer = async (req,res)=>{
+  const id =req.params.id
+  try {
+    const product = await Products.find()
+    const categories = await Categories.find()
+    const offer=await Offers.findById(id)
+    res.render('editOffer',{offer,product, categories})
+    
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching offer' });    
+  }
+
+}
+
 
 const newOffer = async (req, res) => {
   try {
@@ -694,13 +701,87 @@ const newOffer = async (req, res) => {
         usedCount: 0
     });
       await newOffer.save();
+      console.log(newOffer);
+      
       res.status(200).json({ message: 'Offer created successfully' })
   } catch (error) {
       res.status(400).json({ message:'something went wrong! Try again.'});
   }
-}
+} 
 
+const editOffer = async (req, res) => {
+  try {
+      const offerId = req.params.id;
+      const { 
+          title, 
+          description, 
+          discountType, 
+          discountValue, 
+          startDate, 
+          endDate, 
+          active,
+          applicableTo,
+          productId,
+          categoryId,
+          maxUsage
+      } = req.body;
 
+      // Validate required fields
+      if (!title || !discountType || !discountValue || !startDate || !endDate || !applicableTo) {
+          return res.status(400).json({status: 'error', message: 'Please fill all required fields' });
+      }
+
+      // Create update object
+      const updateData = {
+          title,
+          description,
+          discountType,
+          discountValue: Number(discountValue),
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          active: active === 'true',
+          applicableTo,
+          maxUsage: Number(maxUsage),
+          // Handle arrays based on applicableTo
+          productId: applicableTo === 'product' || applicableTo === 'both' ? 
+                    (Array.isArray(productId) ? productId : [productId]).filter(Boolean) : 
+                    [],
+          categoryId: applicableTo === 'category' || applicableTo === 'both' ? 
+                     (Array.isArray(categoryId) ? categoryId : [categoryId]).filter(Boolean) : 
+                     []
+      };
+
+      // Validate dates
+      if (new Date(startDate) >= new Date(endDate)) {
+          return res.status(400).json({status: 'error', message: 'End date must be after start date' });
+      }
+
+      if (discountType === 'percentage' && (discountValue <= 0 || discountValue > 60)) {
+          return res.status(400).json({status: 'error', message: 'Percentage discount must be between 0 and 100' });
+      }
+
+      if (discountType === 'fixed' && discountValue <= 0) {
+          return res.status(400).json({status: 'error', message: 'Fixed discount must be greater than 0' });
+      }
+
+      const updatedOffer = await Offers.findByIdAndUpdate(
+          offerId,
+          updateData,
+          { new: true, runValidators: true }
+      );
+
+      if (!updatedOffer) {
+          return res.status(404).json({status: 'error', message: 'Offer not found' });
+      }
+
+      // res.status(200).json({ status: 'success', message: 'Offer updated successfully.' });
+      return res.redirect('/admin/offers')
+
+  } catch (error) {
+      console.error('Error updating offer:', error);
+      res.status(400).json({ status: 'error', message: error.message || 'An error occurred.' });
+  }
+};
 
 const renderOffersList = async(req,res)=>{
   try {
@@ -1448,7 +1529,9 @@ module.exports={
    adminSalesData,
    getBestSellingItems,
    removeImage,
-   deleteproduct
+   deleteproduct,
+   renderEditOffer,
+    editOffer
 
 
     

@@ -9,7 +9,8 @@ const {renderDashboard,renderUsers,renderProduct,renderAddProduct,addProduct,ren
     renderadminOrderdetails,changeOrderStatus,
     renderaddOffer,renderOffersList,newOffer,listOffers,unlistOffers,deleteOffers,renderAddCoupon,
     createCoupon,renderadminOrderitemdetails,changeReturnStatus,renderSalesReport,filterReport,downloadPdf,downloadExcel,
-    adminSalesData,getBestSellingItems,removeImage,deleteproduct}=require('../controllers/adminController')
+    adminSalesData,getBestSellingItems,removeImage,deleteproduct,renderEditOffer,
+    editOffer}=require('../controllers/adminController')
 
 
 router.route('/dashboard').get(renderDashboard)
@@ -40,6 +41,7 @@ router.route('/offers').get(renderOffersList)
 router.route('/offers/unlist/:id').get(unlistOffers)
 router.route('/offers/list/:id').get(listOffers)
 router.route('/offers/delete/:id').delete(deleteOffers)
+router.route('/offers/edit/:id').get(renderEditOffer).post(editOffer)
 
 
 router.route('/create-coupon').get(renderAddCoupon).post(createCoupon)
