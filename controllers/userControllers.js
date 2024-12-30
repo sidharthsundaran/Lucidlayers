@@ -1512,7 +1512,6 @@ const renderOrders = async (req,res)=>{
         if (!order) {
             return res.status(404).json({ message: "Order not found." });
         }
-        console.log("sdfs",order);
         
         const totalOrderPrice = order.totalPrice; 
         const totalDiscount = order.discount
@@ -1522,21 +1521,21 @@ const renderOrders = async (req,res)=>{
         
         const productDoc = await products.findById(orderItem.productId);
         if (productDoc) {
+
             const sizeVariation = productDoc.sizeVariations.find(s => s.size === orderItem.size);
+            if(sizeVariation.stock<5){
+                return res.status(500).json({ message: "This item cannnot be canceled due to stock count" });
+            }
             if (sizeVariation) {
                 sizeVariation.stock += orderItem.quantity;
                 await productDoc.save();
             }
         }
-        console.log(itemPrice,'itemorice')
-        console.log(totalDiscount,'discount')
-        console.log(totalOrderPrice,'total');
+      
         
         const proportionOfDiscount = (itemPrice / totalOrderPrice) * totalDiscount;
-        console.log(proportionOfDiscount,'proportion');
         
         const refundAmount =Math.round(itemPrice - Math.min(proportionOfDiscount, totalDiscount))
-        console.log(refundAmount,'refund');
         
         if (order.paymentMethod === 'Razorpay') {
             const wallet = await Wallet.findOne({ user: order.user });
