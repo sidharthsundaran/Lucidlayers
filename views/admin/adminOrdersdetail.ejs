@@ -154,7 +154,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                             <form class="form-label" action="/admin/order-details?id=<%= order._id %>" method="post">
-                                <% if (order.orderStatus !== 'delivered') { %>
+                                <% if (order.orderStatus !== 'delivered' && order.orderStatus !== 'canceled') { %>
                                     <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="status" id="status">
                                         <option value="" disabled selected>Change status</option>
                                         <% if (order.orderStatus !== 'returned' && order.orderStatus !== 'refunded') { %>
@@ -271,14 +271,6 @@
                         <div class="col-lg-1"></div>
                         <div class="col-lg-4">
                             <% if(order.paymentMethod!='Pay On Delivery') { %>
-                            <div class="box shadow-sm bg-light">
-                                <h6 class="mb-15">Payment info</h6>
-                                <p>
-                                    <img src="assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
-                                    Business name: Grand Market LLC <br>
-                                    Phone: +1 (800) 555-154-52
-                                </p>
-                            </div>
                             <% } %>
                             <div class="h-25 pt-4">
                                 <div class="mb-3">

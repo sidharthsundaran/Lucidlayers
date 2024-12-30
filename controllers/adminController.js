@@ -914,7 +914,7 @@ const renderadminOrderitemdetails = async (req, res) => {
     let statusOptions = []
     let showSaveButton = true;
 
-    if (orderStatus === 'delivered') {
+    if ( orderStatus === 'delivered' || orderStatus === 'canceled') {
       showSaveButton = false
     } else if (orderStatus === 'returned') {
       statusOptions = ['refunded', 'rejected']
@@ -1046,11 +1046,19 @@ const changeReturnStatus = async (req, res) => {
         order.totalPrice -= refundAmount;
         await order.save();
 
-        const allItemsCanceled = order.items.every(item => item.orderStatus === 'returned');
-        if (allItemsCanceled) {
+        const allItemsreturned = order.items.every(item => item.orderStatus === 'returned');
+        if (allItemsreturned) {
             await Order.findByIdAndUpdate(
                 orderId,
                 { $set: { orderStatus: 'returned' } },
+                { new: true }
+            );
+        }
+        const allItemsCanceled = order.items.every(item => item.orderStatus === 'canceled');
+        if (allItemsCanceled) {
+            await Order.findByIdAndUpdate(
+                orderId,
+                { $set: { orderStatus: 'canceled' } },
                 { new: true }
             );
         }
