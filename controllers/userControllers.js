@@ -1515,7 +1515,6 @@ const renderOrders = async (req,res)=>{
         
         const totalOrderPrice = order.totalPrice; 
         const totalDiscount = order.discount
-        console.log(totalOrderPrice,totalDiscount,'sddsf');
         
         const itemPrice = orderItem.price * orderItem.quantity
         
@@ -1540,7 +1539,6 @@ const renderOrders = async (req,res)=>{
         if (order.paymentMethod === 'Razorpay') {
             const wallet = await Wallet.findOne({ user: order.user });
             if (wallet) {
-                console.log(wallet.balance)
                 wallet.balance += refundAmount;
                 await wallet.save();
                 

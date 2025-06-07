@@ -1173,7 +1173,6 @@ const filterReport = async (req, res) => {
 const downloadPdf = async (req, res) => {
   
   const { reportType, startDate, endDate } = req.body;
-console.log("dsdsdsd,",endDate);
 
   try {
     const match = {};
@@ -1283,6 +1282,9 @@ console.log("dsdsdsd,",endDate);
     let totalDiscount = 0;
 
     orders.forEach((order) => {
+      for(let i=0;i<10;i++){
+        
+      }
       drawRow(y);
       const netAmount = order.totalPrice - (order.discount || 0);
       addRowText(

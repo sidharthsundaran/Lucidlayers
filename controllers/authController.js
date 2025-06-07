@@ -95,8 +95,7 @@ async(req, res) => {
          
         user.otp = otp;
         user.otpExpiredAt = otpExpiresAt;
-        await user.save();
-        
+        await user.save();        
         await sendOtpMail(user.email, otp);
 
         const userId = user._id
@@ -250,7 +249,6 @@ const resetpassword = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_OTP_TOKEN);
         const email = decoded.email;
-        console.log('Email:', email);
         const hashedPassword = await bcrypt.hash(password, 10);
         const userdata = await User.findOneAndUpdate(
             { email: email },
@@ -267,7 +265,6 @@ const resetpassword = async (req, res) => {
 
     } catch (error) {
         console.log('Error:', error.message);
-        // Handle invalid or expired token
         return res.render('resetPassword', { message: "An error occurred or token is invalid." });
     }
 };
@@ -324,7 +321,6 @@ const renderResetPassword=async(req,res)=>{
 const userLogin = async(req,res)=>{
     
     const{email,password} = req.body
-    console.log(email, password)
     try {
         const user = await User.findOne({email})
         if(user.blocked==true){

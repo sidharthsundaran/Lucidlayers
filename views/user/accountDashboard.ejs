@@ -603,7 +603,6 @@
         document.getElementById("Referalcode").innerText = data.referalcode   || "No code received";
       })
       .catch((error) => {
-        // Handle errors
         console.error(error);
         document.getElementById("Referalcode").innerText = "Error generating code";
       });

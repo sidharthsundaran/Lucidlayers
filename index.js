@@ -43,8 +43,7 @@ async function server() {
 try {
     await connectDb(DB)
     app.listen(6612,()=>{
-        console.log("listening to port 6612");
-        
+        console.log("listening to port 6612"); 
     })
     
 } catch (error) {
